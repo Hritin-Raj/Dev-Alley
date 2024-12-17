@@ -1,8 +1,17 @@
 import React from 'react'
+import Post from './Post-Project'
 
 const Feed = () => {
   return (
-    <div className='flex-1'>Feed</div>
+    <div className=''>
+      <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+    </div>
   )
 }
 

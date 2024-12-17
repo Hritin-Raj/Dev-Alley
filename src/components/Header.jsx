@@ -7,7 +7,7 @@ import HighlightIcon from '@mui/icons-material/Highlight';
 const Header = () => {
   return (
     <div className="h-[90px] w-full p-[15px]  flex justify-between items-center">
-      <div className="h-full flex items-center  m-4"><HighlightIcon fontSize="large" className=" text-yellow-400"/><span className="text-[25px]">DevAlley</span></div>
+      <div className="h-full flex items-center  m-4"><HighlightIcon fontSize="large" className=" text-yellow-400"/><span className="text-4xl">DevAlley</span></div>
       <div className="h-full flex justify-between items-center">
         <SearchBar />
         <ul className="flex m-3  h-full items-center">

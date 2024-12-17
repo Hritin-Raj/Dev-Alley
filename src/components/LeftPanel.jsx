@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import Post from "./Post-Profile";
 
 const LeftPanel = () => {
   return (
@@ -73,6 +74,10 @@ const LeftPanel = () => {
         className="w-full overflow-hidden px-[30px] py-[20px] my-3 rounded-3xl flex-1 bg-white"
       >
         <span className="text-2xl">Posts</span>
+
+        <Post />
+        <Post />
+        <Post />
       </div>
     </div>
   );
