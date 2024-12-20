@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./components/Header";
 import Feed from "./components/Feed";
 import Footer from "./components/Footer";
-import Post from "./components/Post-Project";
+import PostProject from "./components/Post-Project";
 
 const Home = () => {
   return (
@@ -19,14 +19,14 @@ const Home = () => {
           the world, and collaborate with a community that celebrates ideas.
         </div>
       </div>
-      <div id='feed' className="rounded-lg flex flex-wrap justify-start m-7 gap-4">
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+      <div id='feed' className="rounded-lg flex flex-wrap justify-between mx-[100px] my-[50px] gap-4">
+        <PostProject />
+        <PostProject />
+        <PostProject />
+        <PostProject />
+        <PostProject />
+        <PostProject />
+        <PostProject />
       </div>
       {/* <Feed /> */}
       <Footer />
