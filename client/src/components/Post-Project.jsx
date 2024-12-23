@@ -5,8 +5,6 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-// rounded-3xl overflow-hidden w-[100%] h-[300px] m-2 flex bg-red-200
-//w-[calc(50%-1rem)]
 
 const Post = () => {
   const [liked, setLikedState] = useState(false);

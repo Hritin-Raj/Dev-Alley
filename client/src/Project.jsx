@@ -2,8 +2,6 @@ import React from "react";
 import Header from "./components/Header";
 import PostProject from "./components/Post-Project";
 import Footer from "./components/Footer";
-//  rounded-lg flex flex-1 m-7 bg-slate-300
-//bg-slate-300 
 
 const Project = () => {
   return (
@@ -28,4 +26,3 @@ const Project = () => {
 };
 
 export default Project;
-//grid grid-cols-2 gap-4
