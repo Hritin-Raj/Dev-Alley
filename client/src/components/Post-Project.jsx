@@ -33,6 +33,7 @@ const Post = () => {
         </div>
 
         <div className="absolute bottom-0 flex justify-between w-full">
+
           <div className="m-3 cursor-pointer" onClick={toggleLike}>
             {liked ? (
               <FavoriteIcon fontSize="large" style={{ color: "red" }} />
@@ -40,23 +41,29 @@ const Post = () => {
               <FavoriteBorderIcon fontSize="large" />
             )}
           </div>
-          <div className=" ml-3 w-[200px]">
-            <ul className="flex justify-center">
-              <li className="m-2">
-                <InstagramIcon fontSize="large" />
-              </li>
-              <li className="m-2">
-                <LinkedInIcon fontSize="large" />
-              </li>
+
+          <div className=" mr-3 ">
+            <ul>
               <li className="m-2">
                 <GitHubIcon fontSize="large" />
               </li>
             </ul>
           </div>
+
         </div>
+        
       </div>
     </div>
   );
 };
 
 export default Post;
+
+//flex  justify-center
+
+{/* <li className="m-2">
+                <InstagramIcon fontSize="large" />
+              </li>
+              <li className="m-2">
+                <LinkedInIcon fontSize="large" />
+              </li> */}

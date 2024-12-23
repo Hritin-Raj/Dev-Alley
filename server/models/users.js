@@ -10,23 +10,26 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
+      default: 'Hritin Raj'
     },
     email: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
+      default: 'hritin@gmail.com'
     },
     password: {
       type: String,
       required: true,
+      default: '1234'
     },
     profileImage: {
       type: String,
-      default: "",
+      default: "client\src\icons\DevelopmentIcon-1.jpg",
     },
     bio: {
       type: String,
-      default: "",
+      default: "Random bio",
     },
     skills: {
       type: [String],
@@ -66,4 +69,4 @@ const userSchema = mongoose.Schema(
 
 // Export
 const Users = mongoose.model('users', userSchema);
-module.exports = Users;
+export default Users;

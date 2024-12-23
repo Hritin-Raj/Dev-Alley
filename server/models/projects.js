@@ -24,10 +24,10 @@ const projectSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
-    tags: {
-      type: [String],
-      default: [],
-    },
+    // tags: {
+    //   type: [String],
+    //   default: [],
+    // },
     images: {
       type: [String],
       default: [],
@@ -52,4 +52,4 @@ const projectSchema = mongoose.Schema(
 
 // Export
 const Projects = mongoose.model("projects", projectSchema);
-module.exports = Projects;
+export default Projects;

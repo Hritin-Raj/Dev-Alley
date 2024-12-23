@@ -47,22 +47,33 @@ const Post = () => {
           )}
         </div>
 
-        <div className="  w-[200px]">
-          <ul className="flex justify-center">
-            <li className="m-2">
-              <InstagramIcon fontSize="large" />
-            </li>
-            <li className="m-2">
-              <LinkedInIcon fontSize="large" />
-            </li>
-            <li className="m-2">
-              <GitHubIcon fontSize="large" />
-            </li>
-          </ul>
-        </div>
+        <div>
+            <ul>
+              <li className="my-2">
+                <GitHubIcon fontSize="large" />
+              </li>
+            </ul>
+          </div>
+
       </div>
     </div>
   );
 };
 
 export default Post;
+
+{/* <div className="  w-[200px]">
+          <ul className="flex justify-center">
+            
+            <li className="m-2">
+              <GitHubIcon fontSize="large" />
+            </li>
+          </ul>
+        </div> */}
+
+{/* <li className="m-2">
+              <InstagramIcon fontSize="large" />
+            </li>
+            <li className="m-2">
+              <LinkedInIcon fontSize="large" />
+            </li> */}
