@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "./components/Header";
-import PostProject from "./components/Post-Project";
-import Footer from "./components/Footer";
+import Header from "../components/Header";
+import PostProject from "../components/Post-Project";
+import Footer from "../components/Footer";
 
 const Project = () => {
   return (
