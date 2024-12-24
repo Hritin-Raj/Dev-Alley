@@ -9,7 +9,7 @@ function Login() {
     <div className="flex items-center justify-center h-screen">
       <div className="bg-white shadow-2xl border-[3px] rounded-xl w-[500px] h-[500px] py-[20px] text-center">
         <div className="text-5xl font-serif">Login</div>
-        <h2 class="text-2xl my-[20px]">Welcome Back!!</h2>
+        <h2 className="text-2xl my-[20px]">Welcome Back!!</h2>
         <form className="h-[300px] flex flex-col items-center ">
           <div className="my-[10px] mx-[10px] h-[50px] flex justify-center items-center">
             <PersonIcon fontSize="large" className="mx-2" />
@@ -34,7 +34,7 @@ function Login() {
           <div className="my-[10px] ml-[50px] h-[50px]">
             <Button
               className="h-full w-[400px]"
-              style={{ backgroundColor: "purple" }}
+              style={{ backgroundColor: "purple", fontSize: "large" }}
               variant="contained"
             >
               Login
@@ -42,7 +42,13 @@ function Login() {
           </div>
         </form>
 
-        <div className="text-xl">Don't have an account?<Link to="/signup" className="text-purple-900"> SignUp</Link></div>
+        <div className="text-xl">
+          Don't have an account?
+          <Link to="/signup" className="text-purple-900">
+            {" "}
+            SignUp
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,10 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import Users from "./models/users.js";
-import Projects from "./models/projects.js";
 import connectMongoDB from "./models/dbConnections.js";
+import userRoutes from "./router/userRoutes.js";
+import projectRoutes from "./router/projectRoutes.js"
 
 const app = express();
 dotenv.config();
@@ -22,7 +21,8 @@ app.use(express.urlencoded({ extended: true }))
 
 
 // Routes
-
+app.use("/api/users", userRoutes);
+app.use("/api/projects", projectRoutes);
 
 
 

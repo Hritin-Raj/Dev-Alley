@@ -2,30 +2,25 @@ import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     name: {
       type: String,
       required: true,
-      default: 'Hritin Raj'
+      default: 'Hritin Raj',
     },
     email: {
       type: String,
       required: true,
-      // unique: true,
-      default: 'hritin@gmail.com'
+      unique: true, // Ensure email is unique
+      default: 'hritin@gmail.com',
     },
     password: {
       type: String,
       required: true,
-      default: '1234'
+      default: '1234',
     },
     profileImage: {
       type: String,
-      default: "client\src\icons\DevelopmentIcon-1.jpg",
+      default: "client/src/icons/DevelopmentIcon-1.jpg",
     },
     bio: {
       type: String,
@@ -62,11 +57,8 @@ const userSchema = mongoose.Schema(
       default: [],
     },
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt fields
+  { timestamps: true }
 );
 
-// pre-Middleware
-
-// Export
 const Users = mongoose.model('users', userSchema);
 export default Users;
