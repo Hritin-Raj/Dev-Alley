@@ -2,18 +2,13 @@ import mongoose from "mongoose";
 
 const projectSchema = mongoose.Schema(
   {
-    id: {
+    title: {
       type: String,
       required: true,
-      unique: true,
     },
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-      required: true,
-    },
-    title: {
-      type: String,
       required: true,
     },
     description: {
@@ -24,10 +19,6 @@ const projectSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
-    // tags: {
-    //   type: [String],
-    //   default: [],
-    // },
     images: {
       type: [String],
       default: [],

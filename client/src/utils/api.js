@@ -25,13 +25,19 @@ export const postData = async (endpoint, data) => {
       body: JSON.stringify(data),
     });
 
+    // Parse response JSON only once
+    const result = await response.json();
+
     if (!response.ok) {
-      throw new Error("Failed to post data");
+      console.error(result.message || "Failed to post data");
+      throw new Error(result.message || "Failed to post data");
     }
-    return await response.json();
+
+    return result;
   } catch (error) {
     console.error("API Error:", error);
     throw error;
   }
 };
+
 

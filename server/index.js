@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import connectMongoDB from "./models/dbConnections.js";
+import authRoutes from "./router/authRoutes.js"
 import userRoutes from "./router/userRoutes.js";
 import projectRoutes from "./router/projectRoutes.js"
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 
 
 // Routes
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 
