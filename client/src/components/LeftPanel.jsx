@@ -1,4 +1,5 @@
 import React from "react";
+import Users from "../../../server/models/users";
 import userBg from "../icons/userBg.jpg";
 import Button from "@mui/material/Button";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -6,10 +7,14 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import PostProfile from "./Post-Profile";
 import PlaceIcon from '@mui/icons-material/Place';
-//  
-// 
 
-const LeftPanel = () => {
+
+const LeftPanel = ({user}) => {
+  if (!user) {
+    return <div>User data is unavailable.</div>;
+  }
+  console.log(user)
+
   return (
     <div id="left-panel" className="flex flex-col w-[75%] m-4">
       <div
@@ -27,16 +32,16 @@ const LeftPanel = () => {
         <div className="flex justify-between">
           <div className="flex flex-col  mr-3 flex-1  pt-[70px] px-[40px]">
             <span id="name" className="text-4xl mt-[20px]">
-              Hritin Raj
+              {user.name}
             </span>
             <span id="bio" className=" my-1">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus delectus officiis ipsam laudantium. Dolorum aspernatur quas harum dignissimos, maxime repellendus consequuntur odio blanditiis nam beatae consequatur minima dolor culpa nostrum!
+              {user.bio}
             </span>
             <span id="location" className="text-lg"><PlaceIcon />Jamshedpur, India</span>
             <div className="text-xl my-[20px]">
-              <span id="follower-count">100 Followers</span>
+              <span id="follower-count">{user.followers?.length || 0}</span>
               <span id="connection-count" className="ml-3">
-                50 Connections
+                {user.following?.length || 0}
               </span>
             </div>
             <Button variant="contained" className="w-[150px]">

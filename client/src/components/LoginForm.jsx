@@ -31,7 +31,7 @@ function Login() {
     if (check.isValid) {
       try {
         const data = await postData("auth/login", loginDetails);
-        login(data.token);
+        login(data.token, data.user);
         navigate("/home")
         console.log(data.message);
       } catch (error) {

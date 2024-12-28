@@ -42,7 +42,7 @@ function SignUp() {
       if (check.isValid) {
         try {
           const data = postData("auth/signup", signUpData);
-          signup(data.token);
+          signup(data.token, data.user);
           navigate("/home");
           console.log(data.message);
         } catch (error) {
