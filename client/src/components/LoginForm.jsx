@@ -16,8 +16,8 @@ function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const checkDetails = (loginData) => {
-    const { email, password } = loginData;
+  const checkDetails = (data) => {
+    const { email, password } = data;
     if (!email || !password) {
       return { isValid: false, missingFields: !email ? "Email" : "Password" };
     }

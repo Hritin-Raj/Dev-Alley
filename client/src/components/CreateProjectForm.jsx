@@ -4,27 +4,30 @@ import { useNavigate } from "react-router-dom";
 
 const CreateProjectForm = () => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    technologies: '',
+    title: "",
+    description: "",
+    technologies: "",
     images: [],
-    githubLink: '',
-    demoLink: ''
+    githubLink: "",
+    demoLink: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'technologies' ? value.split(',').map(tech => tech.trim()) : value
+      [name]:
+        name === "technologies"
+          ? value.split(",").map((tech) => tech.trim())
+          : value,
     }));
   };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      images: [...prev.images, ...files]
+      images: [...prev.images, ...files],
     }));
   };
 
@@ -45,8 +48,15 @@ const CreateProjectForm = () => {
 
         <div className="space-y-3">
           <label className="block text-xl font-semibold text-gray-700">
-            Title
+            Title{" "}
+            <span
+              style={{ fontSize: "medium", fontStyle: "normal" }}
+              className="text-md"
+            >
+              {"(required)"}
+            </span>
           </label>
+
           <input
             type="text"
             name="title"
@@ -60,7 +70,13 @@ const CreateProjectForm = () => {
 
         <div className="space-y-3">
           <label className="block text-xl font-semibold text-gray-700">
-            Description
+            Description{" "}
+            <span
+              style={{ fontSize: "medium", fontStyle: "normal" }}
+              className="text-md"
+            >
+              {"(required)"}
+            </span>
           </label>
           <textarea
             name="description"
@@ -103,11 +119,18 @@ const CreateProjectForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <label className="block text-xl font-semibold text-gray-700">
-              GitHub Link
+              GitHub Link{" "}
+              <span
+                style={{ fontSize: "medium", fontStyle: "normal" }}
+                className="text-md"
+              >
+                {"(required)"}
+              </span>
             </label>
             <input
               type="url"
               name="githubLink"
+              required
               value={formData.githubLink}
               onChange={handleChange}
               className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"

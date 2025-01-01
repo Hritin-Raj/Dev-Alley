@@ -26,6 +26,10 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "Random bio",
     },
+    location: {
+      type: String,
+      default: "Random location",
+    },
     skills: {
       type: [String],
       default: [],
@@ -48,12 +52,12 @@ const userSchema = mongoose.Schema(
         default: "",
       },
     },
-    followers: {
-      type: [String],
+    followers: { 
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }], 
       default: [],
     },
-    following: {
-      type: [String],
+    following: { 
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }], 
       default: [],
     },
   },

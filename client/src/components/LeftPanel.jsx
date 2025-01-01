@@ -6,14 +6,14 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import PostProfile from "./Post-Profile";
-import PlaceIcon from '@mui/icons-material/Place';
+import PlaceIcon from "@mui/icons-material/Place";
+import EditIcon from "@mui/icons-material/Edit";
 
-
-const LeftPanel = ({user}) => {
+const LeftPanel = ({ user }) => {
   if (!user) {
     return <div>User data is unavailable.</div>;
   }
-  console.log(user)
+  console.log(user);
 
   return (
     <div id="left-panel" className="flex flex-col w-[75%] m-4">
@@ -32,16 +32,27 @@ const LeftPanel = ({user}) => {
         <div className="flex justify-between">
           <div className="flex flex-col  mr-3 flex-1  pt-[70px] px-[40px]">
             <span id="name" className="text-4xl mt-[20px]">
-              {user.name}
+              {user.name}{" "}
+              <span className="mx-[10px] ">
+                <button className="text-2xl h-[40px] w-[80px] text-center bg-purple-300 rounded-lg hover:bg-purple-400">
+                  <EditIcon className="mb-[3px]" />
+                  Edit
+                </button>
+              </span>
             </span>
-            <span id="bio" className=" my-1">
+            <span id="bio" className="text-xl my-1">
               {user.bio}
             </span>
-            <span id="location" className="text-lg"><PlaceIcon />Jamshedpur, India</span>
+            <span id="location" className="text-lg">
+              <PlaceIcon />
+              {user.location}
+            </span>
             <div className="text-xl my-[20px]">
-              <span id="follower-count">{user.followers?.length || 0}</span>
-              <span id="connection-count" className="ml-3">
-                {user.following?.length || 0}
+              <span id="follower-count" className="text-3xl">
+                {user.followers?.length  || 0 } <span className="text-xl">Followers</span>
+              </span>
+              <span id="connection-count" className="ml-3 text-3xl">
+                {user.following?.length  || 0 } <span className="text-xl">Following</span>
               </span>
             </div>
             <Button variant="contained" className="w-[150px]">

@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from "react";
-// import * as jwtDecode from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
@@ -14,11 +13,21 @@ const AuthProvider = ({ children }) => {
   // not sure
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (token && user) {
-      setAuth({ isLoggedIn: true, token, user });
+    const user = localStorage.getItem("user"); // Get the raw user data
+  
+    // Check if token and user are valid
+    if (token && user && isTokenValid()) {
+      try {
+        const parsedUser = JSON.parse(user); // Safely parse user data
+        setAuth({ isLoggedIn: true, token, user: parsedUser });
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+        // If parsing fails, clear invalid data
+        localStorage.removeItem("user");
+      }
     }
   }, []);
+  
 
   const isTokenValid = () => {
     const token = localStorage.getItem("token");
@@ -28,16 +37,20 @@ const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(token);
       console.log("decoded", decoded);
       const currentTime = Date.now() / 1000;
-      console.log("decoded.exp", decoded.exp);
-      console.log("currentTime", currentTime);
+      // console.log("decoded.exp", decoded.exp);
+      // console.log("currentTime", currentTime);
 
       if (decoded.exp < currentTime) {
         setAuth({ isLoggedIn: false, token: null, user: null });
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         return false;
       } else return true;
-      
     } catch (error) {
       console.error("Error decoding token:", error);
+      setAuth({ isLoggedIn: false, token: null, user: null });
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       return false; // Treat invalid tokens as expired
     }
   };
@@ -56,7 +69,8 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    setAuth({ isLoggedIn: false, token: null });
+    localStorage.removeItem("user");
+    setAuth({ isLoggedIn: false, token: null, user: null });
     navigate("/login");
   };
 

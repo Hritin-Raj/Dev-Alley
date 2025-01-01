@@ -1,19 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import HighlightIcon from "@mui/icons-material/Highlight";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import { postData } from "../utils/api";
 
 const Header = () => {
-  const { auth, isTokenValid } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext); // , isTokenValid
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   console.log(auth);
+  // })
 
   const handleCreate = () => {
     console.log("Auth state:", auth);
-    if (isTokenValid()) {
+    if (auth.isLoggedIn) { //isTokenValid()
+      console.log("Create Click token valid", auth);
       navigate("/create");
     } else {
       alert("Your session has expired. Please log in again.");
@@ -30,8 +34,9 @@ const Header = () => {
   };
 
   const handleProfileClick = async (event) => {
-    const user = localStorage.getItem("user")
-    navigate("/profile", { state: { user: user }})
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log("Profile Click", auth);
+    navigate(`/profile/${user._id}`, { state: { id: user._id }})
   }
 
   return (
@@ -60,7 +65,7 @@ const Header = () => {
         <div className="m-3 text-xl p-3">
           {auth.isLoggedIn ? (
             <button onClick={handleProfileClick} >
-            {`${auth.user.name}`}
+            {`${auth.user?.name || "Profile"}`}
             </button>
           ) : (
             <>
@@ -68,13 +73,13 @@ const Header = () => {
                 onClick={handleLogin}
                 className="px-4 py-2 border rounded-md bg-blue-500 text-white hover:bg-blue-600"
               >
-                Login
+                Log In
               </button>
               <button
                 onClick={handleSignup}
-                className="px-4 py-2 border rounded-md bg-green-500 text-white hover:bg-green-600"
+                className="px-4 py-2 ml-[5px] border rounded-md bg-green-500 text-white hover:bg-green-600"
               >
-                Signup
+                Sign Up
               </button>
             </>
           )}

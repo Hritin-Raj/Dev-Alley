@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+MOCK_DATA.json
+demo.js
+
 # Editor directories and files
 .env
 .vscode/*
