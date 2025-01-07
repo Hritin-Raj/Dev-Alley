@@ -1,4 +1,3 @@
-// Modified profile.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -14,7 +13,10 @@ const Profile = () => {
   const { userId } = useParams();
 
   const [user, setUser] = useState(null);
-  const [userPopulated, setUserPopulated] = useState({ followers: [], following: [] });
+  const [userPopulated, setUserPopulated] = useState({
+    followers: [],
+    following: [],
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -53,7 +55,7 @@ const Profile = () => {
         }
 
         const data = await fetchData(`users/${userIdToFetch}/stats`);
-        console.log("User Populated", data);
+        // console.log("User Populated", data);
         if (!data) throw new Error("No data received from server");
 
         setUserPopulated(data);
@@ -71,14 +73,39 @@ const Profile = () => {
   if (loading || !user) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  // return (
+  //   <div className="flex flex-row w-full">
+  //     {/* Left Panel */}
+  //     <LeftPanel
+  //       user={user}
+  //       // userPopulated={userPopulated}
+  //       // setUserPopulated={setUserPopulated}
+  //     />
+
+  //     {/* Posts Section */}
+  //     <RightPanel
+  //       followers={userPopulated.followers}
+  //       following={userPopulated.following}
+  //     />
+  //   </div>
+  // );
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-1 flex p-4 bg-slate-100">
-        <LeftPanel user={user} />
-        <RightPanel 
-          followers={userPopulated.followers} 
-          following={userPopulated.following} 
+        {/* Left Panel */}
+        <LeftPanel
+          user={user}
+          // userPopulated={userPopulated}
+          // setUserPopulated={setUserPopulated}
+        />
+
+        <RightPanel
+          followers={userPopulated.followers}
+          following={userPopulated.following}
+          // userPopulated={userPopulated}
+          // setUserPopulated={setUserPopulated}
         />
       </div>
       <Footer />

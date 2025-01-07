@@ -1,8 +1,15 @@
 // Modified right-panel.jsx
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import UserItem from "./UserItem";
+import { AuthContext } from "../contexts/AuthContext";
 
-const RightPanel = ({ followers, following }) => {
+const RightPanel = ({
+  followers,
+  following,
+  // userPopulated,
+  // setUserPopulated,
+}) => {
+  const { auth } = useContext(AuthContext);
   const [displayFollower, setDisplayFollower] = useState(true);
 
   const handleClick = (event) => {
@@ -10,21 +17,16 @@ const RightPanel = ({ followers, following }) => {
     setDisplayFollower(target === "follower");
   };
 
-  const checkFollowing = (userId) => {
-    return following.find((user) => user._id === userId) ? true : false;
+  const checkSelfFollowing = (userId) => {
+    const bool = auth?.user?.following?.includes(userId) || false;
+    return bool;
   };
-
-  const checkFollower = (userId) => {
-    return followers.find((user) => user._id === userId) ? true : false;
-  };
-
-  // const userList = displayFollower ? followers : following;
 
   return (
     <div id="right-panel" className="flex flex-col w-[25%] m-4">
       <div
         id="right-panel-up"
-        className="w-full overflow-hidden h-2/5 my-3 px-5 py-3 text-2xl rounded-3xl bg-white"
+        className="w-full overflow-y-auto h-[800px] my-3 px-5 py-3 text-2xl rounded-3xl bg-white"
       >
         <div className="flex justify-around text-gray-600">
           <span
@@ -50,8 +52,9 @@ const RightPanel = ({ followers, following }) => {
                   name={user.name}
                   userId={user._id}
                   profileImage={user.profileImage}
-                  isFollowing={checkFollowing(user._id)}
-                  isFollower={true}
+                  selfFollowing={checkSelfFollowing(user._id)}
+                  // userPopulated={userPopulated}
+                  // setUserPopulated={setUserPopulated}
                 />
               ))
             : following.map((user) => (
@@ -60,6 +63,9 @@ const RightPanel = ({ followers, following }) => {
                   name={user.name}
                   userId={user._id}
                   profileImage={user.profileImage}
+                  selfFollowing={checkSelfFollowing(user._id)}
+                  // userPopulated={userPopulated}
+                  // setUserPopulated={setUserPopulated}
                 />
               ))}
         </div>
@@ -78,4 +84,3 @@ const RightPanel = ({ followers, following }) => {
 };
 
 export default RightPanel;
-

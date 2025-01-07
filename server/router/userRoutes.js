@@ -1,14 +1,46 @@
 import express from "express";
-import { stats, suggestions, getUserById } from "../controller/userController.js";
+import {body} from "express-validator";
+
+import {
+  getStats,
+  suggestions,
+  getUserById,
+  followUser,
+  unfollowUser,
+  editUser,
+} from "../controller/userController.js";
+import { authenticateUser } from "../middlewares/authenticateUser.js";
 
 const router = express.Router();
 
 router.get("/:id", getUserById);
-router.get("/:id/stats", stats);
+router.get("/:id/stats", getStats);
 router.get("/:id/suggestions", suggestions);
-// router.put("/:id", )
-// router.post("/:id/follow", )
-// router.post("/:id/unfollow", )
-
+router.put(
+  "/:id/edit",
+  authenticateUser,
+  [
+    body("name").notEmpty().withMessage("Name is required"),
+    body("bio").optional().isString(),
+    body("location").optional().isString(),
+    body("skills").optional().isArray(),
+    body("links.github").optional().isURL().withMessage("Invalid GitHub URL"),
+    body("links.linkedIn")
+      .optional()
+      .isURL()
+      .withMessage("Invalid LinkedIn URL"),
+    body("links.instagram")
+      .optional()
+      .isURL()
+      .withMessage("Invalid Instagram URL"),
+    body("links.portfolio")
+      .optional()
+      .isURL()
+      .withMessage("Invalid Portfolio URL"),
+  ],
+  editUser
+);
+router.post("/:id/follow", followUser);
+router.post("/:id/unfollow", unfollowUser);
 
 export default router;

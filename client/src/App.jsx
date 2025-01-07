@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp.jsx";
 import AuthProvider from "./contexts/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import CreateProject from "./pages/CreateProject.jsx";
+import EditProfile from "./components/EditProfileForm.jsx";
 
 function App() {
   return (
@@ -23,6 +24,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:userId/edit"
+            element={
+              <ProtectedRoute>
+                <EditProfile />
               </ProtectedRoute>
             }
           />

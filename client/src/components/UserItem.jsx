@@ -1,19 +1,41 @@
-import React from "react";
+
+
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
+import { AuthContext } from "../contexts/AuthContext";
+import { postData } from "../utils/api";
 
 const UserItem = ({
   name,
   userId,
   profileImage = "/api/placeholder/40/40",
-  isFollowing = false,
-  isFollower = false,
+  selfFollowing,
 }) => {
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
+
+  const [selfFollowingState, setSelfFollowingState] = useState(selfFollowing);
 
   const handleProfileClick = () => {
     navigate(`/profile/${userId}`);
   };
+
+  const handleFollowClick = async () => {
+      try {
+        const response = await postData(`users/${userId}/follow`, {
+          userId: auth.user._id,
+        });
+        if (response.success) {
+          setSelfFollowingState(true);
+          // Update followers in auth or user context
+          auth.user.following = response.data.following;
+        } else {
+          console.error("Failed to follow user:", response.message);
+        }
+      } catch (error) {
+        console.error("Error following user:", error);
+      }
+    };
 
   return (
     <div
@@ -29,16 +51,21 @@ const UserItem = ({
         <span className="font-medium text-gray-800">{name}</span>
       </div>
 
-      {isFollower && isFollowing ? (
-        <Button variant="contained" className="">
-          Follow{" "}
-        </Button>
-      ) : (
-        ""
+      {!selfFollowingState && userId !== auth.user._id && (
+        <button
+          className="bg-blue-500 text-white hover:bg-blue-400 w-[90px] h-[30px] rounded-lg text-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log(`Follow user with ID: ${userId}`);
+            //Logic to follow the user here
+            handleFollowClick()
+          }}
+        >
+          Follow
+        </button>
       )}
     </div>
   );
 };
 
 export default UserItem;
-
