@@ -44,30 +44,58 @@ export const postData = async (endpoint, data) => {
 };
 
 // PUT
-export const putData = async (endpoint, auth, data) => {
+// api.js - Update putData
+export const putData = async (endpoint, data) => {
   try {
     const url = `${BASE_URL}/${endpoint}`;
-    // console.log("PUT URL:", url);
+    const token = localStorage.getItem('token'); // Assuming you store the token in localStorage
+    
     const response = await fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
 
-    const result = await response.json();
-    // console.log(result);
-
     if (!response.ok) {
-      console.error(result.message || "Failed to put data");
+      const result = await response.json();
       throw new Error(result.message || "Failed to put data");
     }
 
-    return result;
+    return await response.json();
   } catch (error) {
     console.error("API Error:", error);
     throw error;
   }
 };
+
+
+// export const putData = async (endpoint, auth, data) => {
+//   try {
+//     const url = `${BASE_URL}/${endpoint}`;
+//     // console.log("PUT URL:", url);
+//     const response = await fetch(url, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${auth.token}`,
+//       },
+//       body: JSON.stringify(data),
+//     });
+
+//     const result = await response.json();
+//     // console.log(result);
+
+//     if (!response.ok) {
+//       console.error(result.message || "Failed to put data");
+//       throw new Error(result.message || "Failed to put data");
+//     }
+
+//     return result;
+//   } catch (error) {
+//     console.error("API Error:", error);
+//     throw error;
+//   }
+// };

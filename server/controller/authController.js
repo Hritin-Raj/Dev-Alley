@@ -1,8 +1,11 @@
 import Users from "../models/users.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
 
-const SECRET_KEY = "secret";
+dotenv.config();
+
+const SECRET_KEY = process.env.JWT_SECRET;
 
 export const login = async (req, res) => {
   try {

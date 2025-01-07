@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { postData, putData } from "../utils/api";
+import { putData } from "../utils/api";
 
 const EditProfile = () => {
   const { auth } = useContext(AuthContext);
@@ -49,21 +49,18 @@ const EditProfile = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const data = await putData(`users/${user._id}/edit`, auth, { formData });
+      const data = await putData(`users/${user._id}/edit`, { formData });
       console.log("Updated User data", data);
-  
-      // const updatedUser = await response.json();
-      // Update the auth context with the new user data
-      // auth.setUser(updatedUser);
-  
-      navigate("/profile");
+
+      // After successful update, update the auth context
+      auth.user = data;
+      navigate(`/profile/${user._id}`);
     } catch (error) {
       console.error("Error saving profile:", error);
     } finally {
       setIsLoading(false);
     }
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -100,19 +97,6 @@ const EditProfile = () => {
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }));
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   try {
-  //     await onSave(formData);
-  //     navigate("/profile");
-  //   } catch (error) {
-  //     console.error("Error saving profile:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

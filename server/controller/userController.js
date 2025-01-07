@@ -181,6 +181,8 @@ export const unfollowUser = async (req, res) => {
 
 
 
+// userController.js - Update editUser
+import { validationResult } from 'express-validator';
 
 export const editUser = async (req, res) => {
   const errors = validationResult(req);
@@ -189,21 +191,15 @@ export const editUser = async (req, res) => {
   }
 
   try {
-    const userId = req.user.id; // Extracted from authMiddleware
-    const { name, bio, location, skills, profileImage, links } = req.body;
+    const userId = req.user.userId; // Make sure this matches the ID from the token
+    const formData = req.body.formData; // Update to match the frontend data structure
 
-    // Update user in the database
     const updatedUser = await Users.findByIdAndUpdate(
       userId,
       {
-        name,
-        bio,
-        location,
-        skills,
-        profileImage,
-        links,
+        ...formData // Spread the form data directly
       },
-      { new: true } // Return the updated user document
+      { new: true }
     );
 
     if (!updatedUser) {
@@ -216,3 +212,38 @@ export const editUser = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// export const editUser = async (req, res) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array() });
+//   }
+
+//   try {
+//     const userId = req.user.id; // Extracted from authMiddleware
+//     const { name, bio, location, skills, profileImage, links } = req.body;
+
+//     // Update user in the database
+//     const updatedUser = await Users.findByIdAndUpdate(
+//       userId,
+//       {
+//         name,
+//         bio,
+//         location,
+//         skills,
+//         profileImage,
+//         links,
+//       },
+//       { new: true } // Return the updated user document
+//     );
+
+//     if (!updatedUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     res.json(updatedUser);
+//   } catch (error) {
+//     console.error("Error updating profile:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
