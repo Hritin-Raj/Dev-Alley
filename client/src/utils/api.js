@@ -44,7 +44,6 @@ export const postData = async (endpoint, data) => {
 };
 
 // PUT
-// api.js - Update putData
 export const putData = async (endpoint, data) => {
   try {
     const url = `${BASE_URL}/${endpoint}`;

@@ -7,17 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 const Header = () => {
-  const { auth } = useContext(AuthContext); // , isTokenValid
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   console.log(auth);
-  // })
-
   const handleCreate = () => {
-    console.log("Auth state:", auth);
-    if (auth.isLoggedIn) { //isTokenValid()
-      console.log("Create Click token valid", auth);
+    if (auth.isLoggedIn) {
       navigate("/create");
     } else {
       alert("Your session has expired. Please log in again.");

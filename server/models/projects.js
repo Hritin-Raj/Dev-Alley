@@ -5,6 +5,7 @@ const projectSchema = mongoose.Schema(
     title: {
       type: String,
       required: true,
+      trim: true,
     },
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,24 +15,25 @@ const projectSchema = mongoose.Schema(
     description: {
       type: String,
       required: true,
+      trim: true,
     },
     technologies: {
       type: [String],
       default: [],
     },
     images: {
-      type: [String],
+      type: [String], // Will store URLs after upload
       default: [],
     },
-    links: {
-      githubLink: {
-        type: String,
-        default: "",
-      },
-      demoLink: {
-        type: String,
-        default: "",
-      },
+    githubLink: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    demoLink: {
+      type: String,
+      trim: true,
+      default: "",
     },
     likes: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
