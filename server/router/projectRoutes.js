@@ -1,5 +1,6 @@
 import express from "express";
-import { createProject, uploadMiddleware } from "../controller/projectController.js";
+import { createProject } from "../controller/projectController.js";
+import { uploadMiddleware } from "../middlewares/upload.js";
 
 const router = express.Router();
 

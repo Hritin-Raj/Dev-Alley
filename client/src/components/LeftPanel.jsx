@@ -10,9 +10,10 @@ import PlaceIcon from "@mui/icons-material/Place";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { postData, putData } from "../utils/api";
+import { postData } from "../utils/api";
 
-const LeftPanel = ({ user }) => {
+const LeftPanel = ({ user, projects }) => {
+  console.log("projects", projects)
   if (!user) {
     return <div>User data is unavailable.</div>;
   }
@@ -38,7 +39,6 @@ const LeftPanel = ({ user }) => {
       });
       if (response.success) {
         setSelfFollowing(true);
-        // Update followers in auth or user context
         auth.user.following = response.data.following;
       } else {
         console.error("Failed to follow user:", response.message);
@@ -55,7 +55,6 @@ const LeftPanel = ({ user }) => {
       });
       if (response.success) {
         setSelfFollowing(false);
-        // Update followers in auth or user context
         auth.user.following = response.data.following;
       } else {
         console.error("Failed to unfollow user:", response.message);
@@ -165,9 +164,11 @@ const LeftPanel = ({ user }) => {
         <div className="text-4xl mx-[20px] ">Posts</div>
 
         <div className="flex flex-wrap">
-          <PostProfile />
-          <PostProfile />
-          <PostProfile />
+          {projects.length === 0 ? (
+            <p> No projects to display</p>
+          ) : (
+            projects.map((project) => (<PostProfile key={project._id} project={project} />))
+          )}
         </div>
       </div>
     </div>

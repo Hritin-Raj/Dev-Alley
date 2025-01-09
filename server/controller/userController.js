@@ -14,7 +14,6 @@ export const getStats = async (req, res) => {
 
   try {
     const user = await getUserStats(id);
-    // console.log("user stats", user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -38,14 +37,12 @@ export const suggestions = async (req, res) => {
 export const getUserById = async (req, res) => {
   const id = req.params.id;
 
-  // Validate ID format
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "Invalid user ID format" });
   }
 
   try {
     const user = await Users.findById(id);
-    // console.log("user by id", user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -59,36 +56,71 @@ export const getUserById = async (req, res) => {
 
 
 
+export const getUserProjects = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ error: "No user id received" });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid User Id" });
+  }
+
+  try {
+    const projects = await Projects.find({ authorId: id }).populate({
+      path: "authorId",
+      select: "name",
+    });
+
+    if (!projects || projects.length === 0) {
+      return res.json({ message: "No projects found", projects });
+    }
+
+    console.log(projects)
+    res.status(200).json({ message: "Successful", projects});
+  } catch (error) {
+    console.error("Error fetching user projects:", error);
+    res.status(500).json({
+      error: "Failed to fetch projects",
+      details: err.message,
+    });
+  }
+};
+
+
+
+
 
 export const followUser = async (req, res) => {
   try {
     const { id } = req.params;
     const authUserId = req.body.userId;
 
-    // Validate IDs
-    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(authUserId)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid user ID format" 
+    if (
+      !mongoose.Types.ObjectId.isValid(id) ||
+      !mongoose.Types.ObjectId.isValid(authUserId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID format",
       });
     }
 
-    // Check if users exist and update them
     const userToFollow = await Users.findById(id);
     const authUser = await Users.findById(authUserId);
 
     if (!userToFollow || !authUser) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "One or both users not found" 
+      return res.status(404).json({
+        success: false,
+        message: "One or both users not found",
       });
     }
 
     // Check if already following
     if (authUser.following.includes(id)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Already following this user" 
+      return res.status(400).json({
+        success: false,
+        message: "Already following this user",
       });
     }
 
@@ -103,7 +135,7 @@ export const followUser = async (req, res) => {
         id,
         { $addToSet: { followers: authUserId } },
         { new: true }
-      )
+      ),
     ]);
 
     return res.json({
@@ -111,16 +143,15 @@ export const followUser = async (req, res) => {
       message: "Successfully followed user",
       data: {
         following: updatedAuthUser.following,
-        followers: updatedUserToFollow.followers
-      }
+        followers: updatedUserToFollow.followers,
+      },
     });
-
   } catch (error) {
-    console.error('Follow user error:', error);
-    return res.status(500).json({ 
-      success: false, 
+    console.error("Follow user error:", error);
+    return res.status(500).json({
+      success: false,
       message: "Internal server error",
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
@@ -130,15 +161,16 @@ export const unfollowUser = async (req, res) => {
     const { id } = req.params;
     const authUserId = req.body.userId;
 
-    // Validate IDs
-    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(authUserId)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid user ID format" 
+    if (
+      !mongoose.Types.ObjectId.isValid(id) ||
+      !mongoose.Types.ObjectId.isValid(authUserId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID format",
       });
     }
 
-    // Update both users using findByIdAndUpdate
     const [updatedAuthUser, updatedUserToFollow] = await Promise.all([
       Users.findByIdAndUpdate(
         authUserId,
@@ -149,13 +181,13 @@ export const unfollowUser = async (req, res) => {
         id,
         { $pull: { followers: authUserId } },
         { new: true }
-      )
+      ),
     ]);
 
     if (!updatedAuthUser || !updatedUserToFollow) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "One or both users not found" 
+      return res.status(404).json({
+        success: false,
+        message: "One or both users not found",
       });
     }
 
@@ -164,25 +196,22 @@ export const unfollowUser = async (req, res) => {
       message: "Successfully unfollowed user",
       data: {
         following: updatedAuthUser.following,
-        followers: updatedUserToFollow.followers
-      }
+        followers: updatedUserToFollow.followers,
+      },
     });
-
   } catch (error) {
-    console.error('Unfollow user error:', error);
-    return res.status(500).json({ 
-      success: false, 
+    console.error("Unfollow user error:", error);
+    return res.status(500).json({
+      success: false,
       message: "Internal server error",
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
 
-
-
-
-// userController.js - Update editUser
-import { validationResult } from 'express-validator';
+// Edit User
+import { validationResult } from "express-validator";
+import Projects from "../models/projects.js";
 
 export const editUser = async (req, res) => {
   const errors = validationResult(req);
@@ -197,7 +226,7 @@ export const editUser = async (req, res) => {
     const updatedUser = await Users.findByIdAndUpdate(
       userId,
       {
-        ...formData // Spread the form data directly
+        ...formData, // Spread the form data directly
       },
       { new: true }
     );
@@ -212,38 +241,3 @@ export const editUser = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-// export const editUser = async (req, res) => {
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     return res.status(400).json({ errors: errors.array() });
-//   }
-
-//   try {
-//     const userId = req.user.id; // Extracted from authMiddleware
-//     const { name, bio, location, skills, profileImage, links } = req.body;
-
-//     // Update user in the database
-//     const updatedUser = await Users.findByIdAndUpdate(
-//       userId,
-//       {
-//         name,
-//         bio,
-//         location,
-//         skills,
-//         profileImage,
-//         links,
-//       },
-//       { new: true } // Return the updated user document
-//     );
-
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     res.json(updatedUser);
-//   } catch (error) {
-//     console.error("Error updating profile:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };

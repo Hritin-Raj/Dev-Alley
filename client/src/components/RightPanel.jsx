@@ -6,8 +6,6 @@ import { AuthContext } from "../contexts/AuthContext";
 const RightPanel = ({
   followers,
   following,
-  // userPopulated,
-  // setUserPopulated,
 }) => {
   const { auth } = useContext(AuthContext);
   const [displayFollower, setDisplayFollower] = useState(true);

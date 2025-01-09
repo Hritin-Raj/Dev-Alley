@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import userBg from "../icons/userBg.jpg";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
+// import InstagramIcon from "@mui/icons-material/Instagram";
+// import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const Post = () => {
+const Post = ({ project }) => {
   const [liked, setLikedState] = useState(false);
 
   const toggleLike = () => {
@@ -25,16 +25,13 @@ const Post = () => {
 
       <div className="">
         <div id="heading" className="text-3xl mt-2">
-          The Heading
+          {project.title || "Untitled Project"}
         </div>
-        <div id="author" className="">
-          Author's name
+        <div id="author" className="text-xl mt-2">
+          {project.authorId.name}
         </div>
         <div id="sub-heading" className="text-xl mt-2">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis
-          nostrum architecto enim non placeat perspiciatis autem ab, saepe
-          voluptas velit ratione, esse optio ullam nisi tempore soluta molestiae
-          vitae atque.
+          {project.description || "No description available"}
         </div>
       </div>
 
@@ -48,32 +45,15 @@ const Post = () => {
         </div>
 
         <div>
-            <ul>
-              <li className="my-2">
-                <GitHubIcon fontSize="large" />
-              </li>
-            </ul>
-          </div>
-
+          <ul>
+            <li className="my-2">
+              <GitHubIcon fontSize="large" />
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
 };
 
 export default Post;
-
-{/* <div className="  w-[200px]">
-          <ul className="flex justify-center">
-            
-            <li className="m-2">
-              <GitHubIcon fontSize="large" />
-            </li>
-          </ul>
-        </div> */}
-
-{/* <li className="m-2">
-              <InstagramIcon fontSize="large" />
-            </li>
-            <li className="m-2">
-              <LinkedInIcon fontSize="large" />
-            </li> */}

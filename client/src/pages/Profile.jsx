@@ -17,6 +17,7 @@ const Profile = () => {
     followers: [],
     following: [],
   });
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -55,7 +56,6 @@ const Profile = () => {
         }
 
         const data = await fetchData(`users/${userIdToFetch}/stats`);
-        // console.log("User Populated", data);
         if (!data) throw new Error("No data received from server");
 
         setUserPopulated(data);
@@ -70,42 +70,41 @@ const Profile = () => {
     fetchUserStats();
   }, [userId, location.state, navigate]);
 
-  if (loading || !user) return <div>Loading...</div>;
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchData(`users/${userId}/projects`);
+        if (!data) {
+          console.log("Error fetching projects");
+        } else {
+          setProjects(data.projects);
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        setError(error.message || "Failed to load projects");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [userId]);
+
+  if (loading || !user || !projects) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-
-  // return (
-  //   <div className="flex flex-row w-full">
-  //     {/* Left Panel */}
-  //     <LeftPanel
-  //       user={user}
-  //       // userPopulated={userPopulated}
-  //       // setUserPopulated={setUserPopulated}
-  //     />
-
-  //     {/* Posts Section */}
-  //     <RightPanel
-  //       followers={userPopulated.followers}
-  //       following={userPopulated.following}
-  //     />
-  //   </div>
-  // );
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <div className="flex-1 flex p-4 bg-slate-100">
         {/* Left Panel */}
-        <LeftPanel
-          user={user}
-          // userPopulated={userPopulated}
-          // setUserPopulated={setUserPopulated}
-        />
+        <LeftPanel user={user} projects={projects} />
 
+        {/* Right Panel */}
         <RightPanel
           followers={userPopulated.followers}
           following={userPopulated.following}
-          // userPopulated={userPopulated}
-          // setUserPopulated={setUserPopulated}
         />
       </div>
       <Footer />
@@ -114,4 +113,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import userBg from "../icons/userBg.jpg";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
+// import InstagramIcon from "@mui/icons-material/Instagram";
+// import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -59,11 +59,3 @@ const Post = () => {
 
 export default Post;
 
-//flex  justify-center
-
-{/* <li className="m-2">
-                <InstagramIcon fontSize="large" />
-              </li>
-              <li className="m-2">
-                <LinkedInIcon fontSize="large" />
-              </li> */}
