@@ -28,12 +28,12 @@ export const postData = async (endpoint, data) => {
       body: JSON.stringify(data),
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
       console.error(result.message || "Failed to post data");
       throw new Error(result.message || "Failed to post data");
     }
-
-    const result = await response.json();
     // console.log("result", result);
 
     return result;

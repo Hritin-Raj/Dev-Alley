@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import userBg from "../icons/userBg.jpg";
-// import InstagramIcon from "@mui/icons-material/Instagram";
-// import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { AuthContext } from "../contexts/AuthContext";
+import { postData } from "../utils/api";
 
 const Post = ({ project }) => {
-  const [liked, setLikedState] = useState(false);
+  const { auth } = useContext(AuthContext);
 
-  const toggleLike = () => {
-    setLikedState((prevLikedState) => !prevLikedState);
+  const [liked, setLikedState] = useState(false);
+  const [likesCount, setLikesCount] = useState(project.likes.length);
+
+  useEffect(() => {
+    const currentUserId = auth.user._id;
+    setLikedState(project.likes.includes(currentUserId));
+  }, [project.likes]);
+
+  const toggleLike = async () => {
+    try {
+      const response = await postData(`projects/${project._id}/like`, { userId: auth.user._id });
+      setLikedState((prevLikedState) => !prevLikedState);
+      setLikesCount(response.likesCount);
+      console.log("likesCount", response.likesCount);
+    } catch (error) {
+      console.error("Error toggling like", error);
+    }
   };
 
   return (
@@ -23,31 +38,34 @@ const Post = ({ project }) => {
         />
       </div>
 
-      <div className="">
+      <div className="cursor-pointer">
         <div id="heading" className="text-3xl mt-2">
           {project.title || "Untitled Project"}
         </div>
         <div id="author" className="text-xl mt-2">
           {project.authorId.name}
         </div>
-        <div id="sub-heading" className="text-xl mt-2">
+        <div id="sub-heading" className="overflow-hidden h-[100px] text-xl mt-2">
           {project.description || "No description available"}
         </div>
       </div>
 
-      <div className="flex justify-between w-full">
+      <div className=" flex justify-between w-full">
         <div className="my-3 cursor-pointer" onClick={toggleLike}>
           {liked ? (
             <FavoriteIcon fontSize="large" style={{ color: "red" }} />
           ) : (
             <FavoriteBorderIcon fontSize="large" />
           )}
+          <span className="ml-2 text-lg">{likesCount}</span>
         </div>
 
         <div>
           <ul>
             <li className="my-2">
-              <GitHubIcon fontSize="large" />
+            <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                <GitHubIcon fontSize="large" />
+              </a>
             </li>
           </ul>
         </div>

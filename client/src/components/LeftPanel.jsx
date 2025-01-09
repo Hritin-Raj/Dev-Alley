@@ -13,7 +13,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { postData } from "../utils/api";
 
 const LeftPanel = ({ user, projects }) => {
-  console.log("projects", projects)
+  // console.log("projects", projects)
   if (!user) {
     return <div>User data is unavailable.</div>;
   }
