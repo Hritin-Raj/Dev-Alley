@@ -41,7 +41,7 @@ function SignUp() {
       const check = checkDetails(signUpData);
       if (check.isValid) {
         try {
-          const data = postData("auth/signup", signUpData);
+          const data = await postData("auth/signup", signUpData);
           signup(data.token, data.user);
           navigate("/home");
           console.log(data.message);

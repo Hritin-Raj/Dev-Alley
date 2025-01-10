@@ -77,3 +77,61 @@ export const toggleLike = async (req, res) => {
     res.status(500).json({ message: "An error occurred", error });
   }
 };
+
+
+//
+export const fetchTopPicks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { page = 1, limit = 8 } = req.query; // Defaults to page 1, max 8 results
+    const skip = (page - 1) * limit;
+
+    // Fetch projects based on user's followers
+    const topPicks = await Projects.find({ followers: id })
+      .sort({ createdAt: -1 }) // Example sorting logic
+      .skip(skip)
+      .limit(parseInt(limit))
+      .populate("authorId", "name"); // Populate authorId with the author's name
+
+    res.status(200).json(topPicks);
+  } catch (error) {
+    console.error("Error fetching top picks:", error);
+    res.status(500).json({ message: "Failed to fetch top picks." });
+  }
+};
+
+export const fetchMostPopular = async (req, res) => {
+  try {
+    const { page = 1, limit = 8 } = req.query; // Defaults to page 1, max 8 results
+    const skip = (page - 1) * limit;
+
+    // Fetch projects sorted by popularity (e.g., based on views or comments)
+    const mostPopular = await Projects.find({})
+      .sort({ popularity: -1 }) // Replace with your popularity criteria
+      .skip(skip)
+      .limit(parseInt(limit))
+      .populate("authorId", "name"); // Populate authorId with the author's name
+
+    res.status(200).json(mostPopular);
+  } catch (error) {
+    console.error("Error fetching most popular:", error);
+    res.status(500).json({ message: "Failed to fetch most popular projects." });
+  }
+};
+
+export const fetchMostLiked = async (req, res) => {
+  try {
+    const { limit = 8 } = req.query; // Max 8 results by default
+
+    // Fetch most liked projects (e.g., based on the "likes" field)
+    const mostLiked = await Projects.find({})
+      .sort({ likes: -1 }) // Replace with your likes criteria
+      .limit(parseInt(limit))
+      .populate("authorId", "name"); // Populate authorId with the author's name
+
+    res.status(200).json(mostLiked);
+  } catch (error) {
+    console.error("Error fetching most liked:", error);
+    res.status(500).json({ message: "Failed to fetch most liked projects." });
+  }
+};
