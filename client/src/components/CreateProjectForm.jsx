@@ -9,27 +9,41 @@ const CreateProjectForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [technologyInput, setTechnologyInput] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    technologies: "",
+    technologies: [],
     images: [],
     githubLink: "",
     demoLink: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setError(""); // Clear error on change
+  const handleAddTechnology = (e) => {
+    e.preventDefault();
+    const trimmedTech = technologyInput.trim();
+    if (trimmedTech && !formData.technologies.includes(trimmedTech)) {
+      setFormData((prev) => ({
+        ...prev,
+        technologies: [...prev.technologies, trimmedTech],
+      }));
+      setTechnologyInput("");
+    }
+  };
+
+  const handleRemoveTechnology = (tech) => {
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        name === "technologies"
-          ? value
-              .split(",")
-              .map((tech) => tech.trim())
-              .filter(Boolean)
-          : value,
+      technologies: prev.technologies.filter((t) => t !== tech),
+    }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setError("");
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
@@ -47,7 +61,6 @@ const CreateProjectForm = () => {
       return false;
     }
 
-    // Validate GitHub URL format
     try {
       new URL(formData.githubLink);
     } catch {
@@ -55,7 +68,6 @@ const CreateProjectForm = () => {
       return false;
     }
 
-    // Validate demo URL if provided
     if (formData.demoLink) {
       try {
         new URL(formData.demoLink);
@@ -94,11 +106,10 @@ const CreateProjectForm = () => {
     setError("");
 
     try {
-      // Prepare JSON data (handle images separately if needed)
       const submitData = {
         ...formData,
-        technologies: formData.technologies, // already an array
-        images: [], // Send as an empty array or handle separately
+        technologies: formData.technologies,
+        images: [],
       };
 
       const response = await postData(
@@ -182,14 +193,44 @@ const CreateProjectForm = () => {
           <label className="block text-xl font-semibold text-gray-700">
             Technologies
           </label>
-          <input
-            type="text"
-            name="technologies"
-            value={formData.technologies}
-            onChange={handleChange}
-            className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
-            placeholder="React, Node.js, MongoDB, etc. (comma-separated)"
-          />
+
+          {/* Input for adding new technologies */}
+          <div className="flex items-center space-x-3">
+            <input
+              type="text"
+              name="technologyInput"
+              value={technologyInput}
+              onChange={(e) => setTechnologyInput(e.target.value)}
+              className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
+              placeholder="Enter a technology (e.g., React, Node.js)"
+            />
+            <button
+              type="button"
+              onClick={handleAddTechnology}
+              className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Add
+            </button>
+          </div>
+
+          {/* Display added technologies as tags */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            {formData.technologies.map((tech, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 text-sm bg-blue-200 text-blue-800 rounded-full flex items-center space-x-2"
+              >
+                <span>{tech}</span>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveTechnology(tech)}
+                  className="text-red-500 hover:text-red-700 focus:outline-none"
+                >
+                  &times;
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="space-y-3">

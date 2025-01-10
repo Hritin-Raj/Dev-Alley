@@ -9,6 +9,7 @@ import AuthProvider from "./contexts/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import CreateProject from "./pages/CreateProject.jsx";
 import EditProfile from "./components/EditProfileForm.jsx";
+import Search from "./pages/Search.jsx";
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateProject />
+              </ProtectedRoute>
+            }
+          />
+        <Route
+            path="/search"
+            element={
+              <ProtectedRoute>
+                <Search />
               </ProtectedRoute>
             }
           />

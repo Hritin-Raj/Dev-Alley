@@ -21,7 +21,6 @@ export const fetchData = async (endpoint) => {
 export const postData = async (endpoint, data) => {
   try {
     const url = `${BASE_URL}/${endpoint}`;
-    // console.log("POST URL:", url);
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
