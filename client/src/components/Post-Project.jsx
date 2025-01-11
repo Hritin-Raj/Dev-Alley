@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import userBg from "../icons/userBg.jpg"; // Default background image
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -8,23 +9,27 @@ import { postData } from "../utils/api"; // Assuming postData is your API utilit
 import { AuthContext } from "../contexts/AuthContext";
 
 const Post = ({ project }) => {
-  const [liked, setLiked] = useState(project.isLiked || false); // Initialize from project data
-  const [likesCount, setLikesCount] = useState(project.likes || 0); // Initialize from project data
-
+  const [liked, setLiked] = useState(project.isLiked); // Initialize from props
+  const [likesCount, setLikesCount] = useState(project.likes.length); // Use the likes array length
   const { auth } = useContext(AuthContext);
 
-  // Function to handle like/unlike actions
+  const navigate = useNavigate();
+
   const toggleLike = async () => {
+    if (!auth?.user) {
+      alert("Please log in to like a project.");
+      navigate("/login"); // Redirect to login page
+      return;
+    }
+
     try {
       const response = await postData(`projects/${project._id}/like`, {
-        userId: auth.user._id, // Replace with actual user ID
+        userId: auth.user._id,
       });
 
-      console.log("response", response);
-
       if (response) {
-        setLiked((prevLikedState) => !prevLikedState);
-        setLikesCount(response.likesCount);
+        setLiked(!liked);
+        setLikesCount(response.likesCount); // Update likes count from response
       }
     } catch (error) {
       console.error("Error toggling like:", error);
@@ -96,12 +101,14 @@ Post.propTypes = {
   project: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
+    authorId: PropTypes.shape({
+      name: PropTypes.string,
+    }),
     description: PropTypes.string,
-    authorName: PropTypes.string,
     image: PropTypes.string,
-    likes: PropTypes.number,
-    isLiked: PropTypes.bool,
+    likes: PropTypes.arrayOf(PropTypes.string),
     githubLink: PropTypes.string,
+    isLiked: PropTypes.bool,
   }).isRequired,
 };
 

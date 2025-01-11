@@ -10,7 +10,16 @@ const Feed = () => {
   const [topPicksPage, setTopPicksPage] = useState(1);
   const [mostPopularPage, setMostPopularPage] = useState(1);
 
-  const { auth } = useContext(AuthContext);
+  const { auth, loading } = useContext(AuthContext);
+
+  // De-duplication function
+  const deduplicateProjects = (projects) => {
+    const uniqueProjects = new Map();
+    projects.forEach((project) => {
+      uniqueProjects.set(project._id, project); // Use `_id` as the unique key
+    });
+    return Array.from(uniqueProjects.values());
+  };
 
   // Fetch projects for "Top Picks" (logged-in user's followers).
   const fetchTopPicks = async (page) => {
@@ -22,10 +31,9 @@ const Feed = () => {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
-      setTopPicks((prev) => {
-        const combined = [...prev, ...data];
-        return combined.slice(0, 8); // Limit to a maximum of 8 projects
-      });
+      console.log("top-picks", data);
+      // setTopPicks((prev) => [...prev, ...data]);
+      setTopPicks((prev) => deduplicateProjects([...prev, ...data]));
     } catch (error) {
       console.error("Error fetching top picks:", error);
     }
@@ -41,10 +49,9 @@ const Feed = () => {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
-      setMostPopular((prev) => {
-        const combined = [...prev, ...data];
-        return combined.slice(0, 8); // Limit to a maximum of 8 projects
-      });
+      console.log("most-popular", data);
+      // setMostPopular((prev) => [...prev, ...data]);
+      setMostPopular((prev) => deduplicateProjects([...prev, ...data]));
     } catch (error) {
       console.error("Error fetching most popular:", error);
     }
@@ -53,30 +60,31 @@ const Feed = () => {
   // Fetch most liked projects for the home page (public view).
   const fetchMostLiked = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/projects/most-liked`
-      );
+      const response = await fetch(`http://localhost:3000/api/projects/most-liked`);
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
-      setMostLiked(data.slice(0, 8)); // Limit to a maximum of 8 projects
+      console.log("most-liked", data);
+      // setMostLiked(data);
+      setMostLiked(deduplicateProjects(data));
     } catch (error) {
       console.error("Error fetching most liked projects:", error);
     }
   };
 
-  // Initial data fetch.
   useEffect(() => {
-    if (auth?.user) {
-      // Logged-in user's view
-      fetchTopPicks(topPicksPage);
-      fetchMostPopular(mostPopularPage);
+    if (loading) return; // Wait until the auth state is initialized
+
+    if (auth?.isLoggedIn) {
+      console.log("auth logged in", auth);
+      fetchTopPicks(1); // Example page number
+      fetchMostPopular(1);
     } else {
-      // Public view (most liked projects)
+      console.log("auth", auth);
       fetchMostLiked();
     }
-  }, [auth]);
+  }, [auth, loading]);
 
   // Load more top picks projects.
   const handleLoadMoreTopPicks = () => {
@@ -102,7 +110,7 @@ const Feed = () => {
             {mostLiked.map((project) => (
               <PostProject
                 key={project._id}
-                project={{ ...project, likes: project.likes.length }}
+                project={{ ...project, isLiked: false }}
               />
             ))}
           </div>
@@ -116,19 +124,20 @@ const Feed = () => {
               {topPicks.map((project) => (
                 <PostProject
                   key={project._id}
-                  project={{ ...project, likes: project.likes.length }}
+                  project={{
+                    ...project,
+                    isLiked: project.likes.includes(auth.user._id),
+                  }}
                 />
               ))}
             </div>
-            {topPicks.length < 8 && (
-              <div
-                className="text-center text-xl mt-4 cursor-pointer"
-                onClick={handleLoadMoreTopPicks}
-              >
-                <KeyboardDoubleArrowDownIcon />
-                View More
-              </div>
-            )}
+            <div
+              className="text-center text-xl mt-4 cursor-pointer"
+              onClick={handleLoadMoreTopPicks}
+            >
+              <KeyboardDoubleArrowDownIcon />
+              View More
+            </div>
           </div>
 
           {/* "Most Popular" Section */}
@@ -138,19 +147,20 @@ const Feed = () => {
               {mostPopular.map((project) => (
                 <PostProject
                   key={project._id}
-                  project={{ ...project, likes: project.likes.length }}
+                  project={{
+                    ...project,
+                    isLiked: project.likes.includes(auth.user._id),
+                  }}
                 />
               ))}
             </div>
-            {mostPopular.length < 8 && (
-              <div
-                className="text-center text-xl mt-4 cursor-pointer"
-                onClick={handleLoadMoreMostPopular}
-              >
-                <KeyboardDoubleArrowDownIcon />
-                View More
-              </div>
-            )}
+            <div
+              className="text-center text-xl mt-4 cursor-pointer"
+              onClick={handleLoadMoreMostPopular}
+            >
+              <KeyboardDoubleArrowDownIcon />
+              View More
+            </div>
           </div>
         </>
       )}
@@ -159,4 +169,3 @@ const Feed = () => {
 };
 
 export default Feed;
-

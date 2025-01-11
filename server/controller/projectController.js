@@ -93,6 +93,8 @@ export const fetchTopPicks = async (req, res) => {
       .limit(parseInt(limit))
       .populate("authorId", "name"); // Populate authorId with the author's name
 
+      console.log("top-picks", topPicks);
+
     res.status(200).json(topPicks);
   } catch (error) {
     console.error("Error fetching top picks:", error);
@@ -112,6 +114,8 @@ export const fetchMostPopular = async (req, res) => {
       .limit(parseInt(limit))
       .populate("authorId", "name"); // Populate authorId with the author's name
 
+      console.log("most-popular", mostPopular);
+
     res.status(200).json(mostPopular);
   } catch (error) {
     console.error("Error fetching most popular:", error);
@@ -128,6 +132,8 @@ export const fetchMostLiked = async (req, res) => {
       .sort({ likes: -1 }) // Replace with your likes criteria
       .limit(parseInt(limit))
       .populate("authorId", "name"); // Populate authorId with the author's name
+
+    console.log("most-liked", mostLiked);
 
     res.status(200).json(mostLiked);
   } catch (error) {
