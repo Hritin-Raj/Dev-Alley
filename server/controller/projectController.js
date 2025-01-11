@@ -13,7 +13,7 @@ export const createProject = async (req, res) => {
   }
 
   try {
-    const formData = req.body; // No need for `formData` nesting
+    const formData = req.body;
     const user = await Users.findById(id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -79,21 +79,24 @@ export const toggleLike = async (req, res) => {
 };
 
 
-//
 export const fetchTopPicks = async (req, res) => {
   try {
     const { id } = req.params;
-    const { page = 1, limit = 8 } = req.query; // Defaults to page 1, max 8 results
+    const { page = 1, limit = 8 } = req.query;
     const skip = (page - 1) * limit;
 
-    // Fetch projects based on user's followers
-    const topPicks = await Projects.find({ followers: id })
-      .sort({ createdAt: -1 }) // Example sorting logic
+    const user = await Users.findById(id).select("following");
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const followingList = user.following;
+
+    const topPicks = await Projects.find({ authorId: { $in: followingList } })
+      .sort({ likes: -1 })
       .skip(skip)
       .limit(parseInt(limit))
-      .populate("authorId", "name"); // Populate authorId with the author's name
-
-      console.log("top-picks", topPicks);
+      .populate("authorId", "name");
 
     res.status(200).json(topPicks);
   } catch (error) {
@@ -102,17 +105,18 @@ export const fetchTopPicks = async (req, res) => {
   }
 };
 
+
+
 export const fetchMostPopular = async (req, res) => {
   try {
-    const { page = 1, limit = 8 } = req.query; // Defaults to page 1, max 8 results
+    const { page = 1, limit = 8 } = req.query;
     const skip = (page - 1) * limit;
 
-    // Fetch projects sorted by popularity (e.g., based on views or comments)
     const mostPopular = await Projects.find({})
-      .sort({ popularity: -1 }) // Replace with your popularity criteria
+      .sort({ likes: -1 })
       .skip(skip)
       .limit(parseInt(limit))
-      .populate("authorId", "name"); // Populate authorId with the author's name
+      .populate("authorId", "name");
 
       console.log("most-popular", mostPopular);
 
@@ -125,13 +129,12 @@ export const fetchMostPopular = async (req, res) => {
 
 export const fetchMostLiked = async (req, res) => {
   try {
-    const { limit = 8 } = req.query; // Max 8 results by default
+    const { limit = 8 } = req.query;
 
-    // Fetch most liked projects (e.g., based on the "likes" field)
     const mostLiked = await Projects.find({})
-      .sort({ likes: -1 }) // Replace with your likes criteria
+      .sort({ likes: -1 })
       .limit(parseInt(limit))
-      .populate("authorId", "name"); // Populate authorId with the author's name
+      .populate("authorId", "name");
 
     console.log("most-liked", mostLiked);
 

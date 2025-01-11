@@ -12,16 +12,14 @@ const Feed = () => {
 
   const { auth, loading } = useContext(AuthContext);
 
-  // De-duplication function
   const deduplicateProjects = (projects) => {
     const uniqueProjects = new Map();
     projects.forEach((project) => {
-      uniqueProjects.set(project._id, project); // Use `_id` as the unique key
+      uniqueProjects.set(project._id, project);
     });
     return Array.from(uniqueProjects.values());
   };
 
-  // Fetch projects for "Top Picks" (logged-in user's followers).
   const fetchTopPicks = async (page) => {
     try {
       const response = await fetch(
@@ -32,14 +30,12 @@ const Feed = () => {
       }
       const data = await response.json();
       console.log("top-picks", data);
-      // setTopPicks((prev) => [...prev, ...data]);
       setTopPicks((prev) => deduplicateProjects([...prev, ...data]));
     } catch (error) {
       console.error("Error fetching top picks:", error);
     }
   };
 
-  // Fetch projects for "Most Popular".
   const fetchMostPopular = async (page) => {
     try {
       const response = await fetch(
@@ -57,7 +53,6 @@ const Feed = () => {
     }
   };
 
-  // Fetch most liked projects for the home page (public view).
   const fetchMostLiked = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/projects/most-liked`);
@@ -66,7 +61,6 @@ const Feed = () => {
       }
       const data = await response.json();
       console.log("most-liked", data);
-      // setMostLiked(data);
       setMostLiked(deduplicateProjects(data));
     } catch (error) {
       console.error("Error fetching most liked projects:", error);
@@ -74,11 +68,11 @@ const Feed = () => {
   };
 
   useEffect(() => {
-    if (loading) return; // Wait until the auth state is initialized
+    if (loading) return;
 
     if (auth?.isLoggedIn) {
       console.log("auth logged in", auth);
-      fetchTopPicks(1); // Example page number
+      fetchTopPicks(1);
       fetchMostPopular(1);
     } else {
       console.log("auth", auth);
@@ -86,14 +80,12 @@ const Feed = () => {
     }
   }, [auth, loading]);
 
-  // Load more top picks projects.
   const handleLoadMoreTopPicks = () => {
     const nextPage = topPicksPage + 1;
     setTopPicksPage(nextPage);
     fetchTopPicks(nextPage);
   };
 
-  // Load more most popular projects.
   const handleLoadMoreMostPopular = () => {
     const nextPage = mostPopularPage + 1;
     setMostPopularPage(nextPage);
@@ -103,7 +95,6 @@ const Feed = () => {
   return (
     <div id="feed">
       {!auth?.user ? (
-        // Public view: Display up to 8 projects of "Most Liked".
         <div id="most-liked" className="my-[50px]">
           <div className="mx-[100px] my-3 text-4xl">Most Liked Projects</div>
           <div className="rounded-lg flex flex-wrap justify-between mx-[100px] gap-4">

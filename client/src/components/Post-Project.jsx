@@ -1,16 +1,16 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import userBg from "../icons/userBg.jpg"; // Default background image
+import userBg from "../icons/userBg.jpg";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { postData } from "../utils/api"; // Assuming postData is your API utility function
+import { postData } from "../utils/api";
 import { AuthContext } from "../contexts/AuthContext";
 
 const Post = ({ project }) => {
-  const [liked, setLiked] = useState(project.isLiked); // Initialize from props
-  const [likesCount, setLikesCount] = useState(project.likes.length); // Use the likes array length
+  const [liked, setLiked] = useState(project.isLiked);
+  const [likesCount, setLikesCount] = useState(project.likes.length);
   const { auth } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Post = ({ project }) => {
   const toggleLike = async () => {
     if (!auth?.user) {
       alert("Please log in to like a project.");
-      navigate("/login"); // Redirect to login page
+      navigate("/login");
       return;
     }
 
@@ -29,7 +29,7 @@ const Post = ({ project }) => {
 
       if (response) {
         setLiked(!liked);
-        setLikesCount(response.likesCount); // Update likes count from response
+        setLikesCount(response.likesCount);
       }
     } catch (error) {
       console.error("Error toggling like:", error);
