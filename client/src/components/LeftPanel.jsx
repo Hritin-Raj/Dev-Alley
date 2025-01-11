@@ -13,7 +13,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { postData } from "../utils/api";
 
 const LeftPanel = ({ user, projects }) => {
-  // console.log("projects", projects)
+  console.log("user", user);
   if (!user) {
     return <div>User data is unavailable.</div>;
   }
@@ -150,7 +150,11 @@ const LeftPanel = ({ user, projects }) => {
           className="absolute top-[40%] left-[30px] transform -translate-y-1/2"
         >
           <img
-            src="src\icons\DevelopmentIcon-1.jpg"
+            src={
+              user?.profileImage
+                ? user.profileImage
+                : "../icons/DevelopmentIcon-1.jpg"
+            }
             alt="Circular Icon"
             className="w-40 h-40 rounded-full border-4 border-white"
           />
@@ -167,7 +171,9 @@ const LeftPanel = ({ user, projects }) => {
           {projects.length === 0 ? (
             <p> No projects to display</p>
           ) : (
-            projects.map((project) => (<PostProfile key={project._id} project={project} />))
+            projects.map((project) => (
+              <PostProfile key={project._id} project={project} />
+            ))
           )}
         </div>
       </div>

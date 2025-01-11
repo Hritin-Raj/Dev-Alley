@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { putData } from "../utils/api";
+import { postData, putData } from "../utils/api";
 
 const EditProfile = () => {
   const { auth } = useContext(AuthContext);
@@ -52,7 +52,6 @@ const EditProfile = () => {
       const data = await putData(`users/${user._id}/edit`, { formData });
       console.log("Updated User data", data);
 
-      // After successful update, update the auth context
       auth.user = data;
       navigate(`/profile/${user._id}`);
     } catch (error) {
@@ -212,6 +211,44 @@ const EditProfile = () => {
                 </span>
               ))}
             </div>
+          </div>
+
+          {/**Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Profile Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={async (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                  console.error("No file selected");
+                  return;
+                }
+
+                const formData = new FormData();
+                formData.append("image", file);
+
+                try {
+                  const response = await fetch("http://localhost:3000/api/users/upload", {
+                    method: "POST",
+                    body: formData,
+                  });
+                  const data = await response.json();
+
+                  console.log("Uploaded image data:", data);
+                  setFormData((prev) => ({
+                    ...prev,
+                    profileImage: data.imageUrl,
+                  }));
+                } catch (err) {
+                  console.error("Error uploading image:", err);
+                }
+              }}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            />
           </div>
 
           {/* Social Links */}

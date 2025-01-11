@@ -16,6 +16,7 @@ MOCK_DATA.json
 demo.js
 
 # Editor directories and files
+/uploads
 .env
 .vscode/*
 !.vscode/extensions.json

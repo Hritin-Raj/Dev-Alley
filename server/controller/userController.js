@@ -1,6 +1,10 @@
 import Users from "../models/users.js";
 import { getUserStats } from "../models/dbCalls.js";
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+
+// Load the environment variables
+dotenv.config();
 
 export const getStats = async (req, res) => {
   const id = req.params.id;
@@ -213,6 +217,8 @@ export const unfollowUser = async (req, res) => {
 import { validationResult } from "express-validator";
 import Projects from "../models/projects.js";
 
+
+// edit
 export const editUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -220,13 +226,13 @@ export const editUser = async (req, res) => {
   }
 
   try {
-    const userId = req.user.userId; // Make sure this matches the ID from the token
-    const formData = req.body.formData; // Update to match the frontend data structure
+    const userId = req.user.userId;
+    const formData = req.body.formData;
 
     const updatedUser = await Users.findByIdAndUpdate(
       userId,
       {
-        ...formData, // Spread the form data directly
+        ...formData,
       },
       { new: true }
     );
@@ -239,5 +245,22 @@ export const editUser = async (req, res) => {
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const uploadProjectImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
+
+    // Get the uploaded file's public URL
+    const imageUrl = `${req.protocol}://${req.get("host")}/${process.env.UPLOADS_FOLDER}/${req.file.filename}`;
+
+    res.status(200).json({ imageUrl, message: "Image uploaded successfully." });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({ message: "Server error during image upload." });
   }
 };
