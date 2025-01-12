@@ -28,11 +28,15 @@ const Post = ({ project }) => {
     }
   };
 
+  const handleEditClick = (e) => {
+    navigate(`/projects/${project._id}/edit`, { state: { project: project }});
+  }
+
   return (
     <div className=" rounded-3xl overflow-hidden w-[calc(50%-3rem)] m-[20px] px-[30px] pt-[30px] bg-white shadow-2xl">
       <div className="">
         <img
-          src={userBg}
+          src={project.projectImage || userBg}
           alt="Image"
           className="w-[500px] h-[250px] object-cover"
         />
@@ -68,6 +72,7 @@ const Post = ({ project }) => {
               </a>
             </li>
           </ul>
+          <span className="mt-2"><button onClick={handleEditClick}><EditIcon fontSize="large" /></button></span>
         </div>
       </div>
     </div>

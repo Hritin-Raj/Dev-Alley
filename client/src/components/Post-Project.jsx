@@ -5,6 +5,7 @@ import userBg from "../icons/userBg.jpg";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import EditIcon from '@mui/icons-material/Edit';
 import { postData } from "../utils/api";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -36,12 +37,16 @@ const Post = ({ project }) => {
     }
   };
 
+  const handleEditClick = (e) => {
+    navigate(`/projects/${project._id}/edit`, { state: { project: project }});
+  }
+
   return (
     <div className="rounded-3xl overflow-hidden w-[calc(50%-1rem)] h-[300px] mt-2 flex bg-white shadow-2xl">
       {/* Project Image */}
       <div className="w-[300px] h-full">
         <img
-          src={project.image || userBg}
+          src={project.projectImage || userBg}
           alt="Project"
           className="h-full w-full object-cover"
         />
@@ -73,23 +78,25 @@ const Post = ({ project }) => {
               <FavoriteBorderIcon fontSize="large" />
             )}
             <span className="ml-2 text-lg">{likesCount}</span>
+            
           </div>
 
           {/* GitHub Icon or Other Links */}
-          <div className="mr-3">
+          <div className="mr-3 flex">
             {project.githubLink && (
               <a
                 href={project.githubLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ul>
+                <ul className="mr-2">
                   <li className="m-2">
                     <GitHubIcon fontSize="large" />
                   </li>
                 </ul>
               </a>
             )}
+            <span className="mt-2"><button onClick={handleEditClick}><EditIcon fontSize="large" /></button></span>
           </div>
         </div>
       </div>

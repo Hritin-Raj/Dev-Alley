@@ -2,6 +2,26 @@ import Projects from "../models/projects.js";
 import Users from "../models/users.js";
 import mongoose from "mongoose";
 
+export const fetchProject = async (req, res) => {
+  const id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid user ID format" });
+  }
+
+  try {
+    const project = await Projects.findById(id);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    res.json(project);
+  } catch (error) {
+    console.error("Error fetching project:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 export const createProject = async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -129,6 +149,7 @@ export const fetchMostPopular = async (req, res) => {
 
 export const fetchMostLiked = async (req, res) => {
   try {
+    console.log("here")
     const { limit = 8 } = req.query;
 
     const mostLiked = await Projects.find({})
@@ -144,3 +165,106 @@ export const fetchMostLiked = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch most liked projects." });
   }
 };
+
+
+
+//
+// Edit Project
+import { validationResult } from "express-validator";
+
+export const uploadProjectImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
+
+    // Get the uploaded file's public URL
+    const imageUrl = `${req.protocol}://${req.get("host")}/${process.env.UPLOADS_FOLDER}/${req.file.filename}`;
+
+    res.status(200).json({ imageUrl, message: "Image uploaded successfully." });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({ message: "Server error during image upload." });
+  }
+};
+
+
+export const updateProject = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { id } = req.params;
+    const formData = req.body.formData;
+
+    if (!formData.title || !formData.description || !formData.githubLink) {
+      return res.status(400).json({ message: "Title, description, and GitHub link are required." });
+    }    
+
+    const updatedProject = await Projects.findByIdAndUpdate(
+      id,
+      {
+        ...formData,
+      },
+      { new: true }
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(updatedProject);
+  } catch (error) {
+    console.error("Error updating project:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+// Route to update project details
+// export const udateProject = async (req, res) => {
+//   const { id } = req.params;
+//   const {
+//     title,
+//     description,
+//     technologies,
+//     githubLink,
+//     demoLink,
+//   } = req.body;
+
+//   try {
+//     const project = projects.find((proj) => proj.id === id);
+
+//     if (!project) {
+//       return res.status(404).json({ message: "Project not found" });
+//     }
+
+//     // Update the project details
+//     project.title = title || project.title;
+//     project.description = description || project.description;
+//     project.technologies = technologies
+//       ? JSON.parse(technologies)
+//       : project.technologies;
+//     project.githubLink = githubLink || project.githubLink;
+//     project.demoLink = demoLink || project.demoLink;
+
+//     // If a new image was uploaded, update the image path
+//     if (req.file) {
+//       // Delete the old image if it exists
+//       if (project.image && project.image !== "uploads/default.png") {
+//         const oldImagePath = path.join(__dirname, "../", project.image);
+//         fs.removeSync(oldImagePath);
+//       }
+
+//       project.image = `uploads/${req.file.filename}`;
+//     }
+
+//     res.status(200).json({ message: "Project updated successfully", project });
+//   } catch (error) {
+//     console.error("Error updating project:", error);
+//     res.status(500).json({ message: "Failed to update project", error });
+//   }
+// };
+

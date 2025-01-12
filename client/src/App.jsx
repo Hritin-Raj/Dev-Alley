@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
-import Project from "./pages/Project.jsx";
+import EditProjectForm from "./components/EditProjectForm.jsx";
 import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import AuthProvider from "./contexts/AuthContext.jsx";
@@ -37,10 +37,10 @@ function App() {
             }
           />
           <Route
-            path="/project"
+            path="/projects/:projectId/edit"
             element={
               <ProtectedRoute>
-                <Project />
+                <EditProjectForm />
               </ProtectedRoute>
             }
           />
