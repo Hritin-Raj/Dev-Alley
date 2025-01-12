@@ -113,37 +113,6 @@ const CreateProjectForm = () => {
     }
   };
 
-  // const onSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!validateForm()) return;
-
-  //   setLoading(true);
-  //   setError("");
-
-  //   try {
-  //     const submitData = {
-  //       ...formData,
-  //       technologies: formData.technologies,
-  //       images: [],
-  //     };
-
-  //     const response = await postData(
-  //       `projects/${auth.user._id}/create`,
-  //       submitData
-  //     );
-
-  //     if (response.error) {
-  //       throw new Error(response.error);
-  //     }
-
-  //     navigate(`/profile/${auth.user._id}`);
-  //   } catch (err) {
-  //     setError(err.message || "Failed to create project");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
       <form
@@ -312,7 +281,7 @@ const CreateProjectForm = () => {
 
           <div className="space-y-3">
             <label className="block text-xl font-semibold text-gray-700">
-              Demo Link
+              Web Link
             </label>
             <input
               type="url"

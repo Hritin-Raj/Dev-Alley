@@ -281,7 +281,7 @@ const EditProjectForm = () => {
 
           <div className="space-y-3">
             <label className="block text-xl font-semibold text-gray-700">
-              Demo Link
+              Web Link
             </label>
             <input
               type="url"

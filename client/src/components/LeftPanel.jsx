@@ -8,21 +8,22 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import PostProfile from "./Post-Profile";
 import PlaceIcon from "@mui/icons-material/Place";
 import EditIcon from "@mui/icons-material/Edit";
+// import LogoutButton from "./LogoutButton";
 
 import { AuthContext } from "../contexts/AuthContext";
 import { postData } from "../utils/api";
 
 const LeftPanel = ({ user, projects }) => {
-  console.log("user", user);
   if (!user) {
     return <div>User data is unavailable.</div>;
   }
 
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
   const { userId } = useParams();
   const navigate = useNavigate();
 
   const [selfFollowing, setSelfFollowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const isSelfFollowing = () => {
@@ -31,6 +32,25 @@ const LeftPanel = ({ user, projects }) => {
 
     auth.user._id !== user._id ? isSelfFollowing() : "";
   }, [auth.user.following, userId, auth.user._id, user._id]);
+
+  const handleLogout = async () => {
+    if (!auth.isLoggedIn) {
+      console.warn("User is not logged in.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      navigate("/login", { replace: true });
+      logout();
+      console.log("User logged out successfully.", auth);
+      // navigate("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleFollowClick = async () => {
     try {
@@ -84,9 +104,9 @@ const LeftPanel = ({ user, projects }) => {
         {/* User Info */}
         <div className="flex justify-between">
           <div className="flex flex-col  mr-3 flex-1  pt-[70px] px-[40px]">
-            <span id="name" className="text-4xl mt-[20px]">
+            <span id="name" className="text-4xl mt-[20px] flex">
               {user.name}{" "}
-              <span className="mx-[10px] ">
+              <span className="mx-[20px] ">
                 {auth.user._id === user._id ? (
                   <button
                     onClick={handleEditClick}
@@ -97,6 +117,17 @@ const LeftPanel = ({ user, projects }) => {
                   </button>
                 ) : (
                   ""
+                )}
+              </span>
+              <span className="my-2">
+                {auth.isLoggedIn && (
+                  <button
+                    onClick={handleLogout}
+                    disabled={isLoading}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Logout
+                  </button>
                 )}
               </span>
             </span>
@@ -133,13 +164,31 @@ const LeftPanel = ({ user, projects }) => {
           <div className=" ml-3 w-[200px]">
             <ul className="flex justify-center">
               <li className="m-2">
-                <InstagramIcon fontSize="large" />
+                <a
+                  href={auth.user.links.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <InstagramIcon fontSize="large" />
+                </a>
               </li>
               <li className="m-2">
-                <LinkedInIcon fontSize="large" />
+                <a
+                  href={auth.user.links.linkedIn}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <LinkedInIcon fontSize="large" />
+                </a>
               </li>
               <li className="m-2">
-                <GitHubIcon fontSize="large" />
+                <a
+                  href={auth.user.links.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GitHubIcon fontSize="large" />
+                </a>
               </li>
             </ul>
           </div>

@@ -1,13 +1,16 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import userBg from "../icons/userBg.jpg";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import EditIcon from "@mui/icons-material/Edit"
 import { AuthContext } from "../contexts/AuthContext";
 import { postData } from "../utils/api";
 
 const Post = ({ project }) => {
   const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [liked, setLikedState] = useState(false);
   const [likesCount, setLikesCount] = useState(project.likes.length);
@@ -64,7 +67,7 @@ const Post = ({ project }) => {
           <span className="ml-2 text-lg">{likesCount}</span>
         </div>
 
-        <div>
+        <div className="flex">
           <ul>
             <li className="my-2">
             <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
@@ -72,7 +75,7 @@ const Post = ({ project }) => {
               </a>
             </li>
           </ul>
-          <span className="mt-2"><button onClick={handleEditClick}><EditIcon fontSize="large" /></button></span>
+          <span className="mt-2 ml-4"><button onClick={handleEditClick}><EditIcon fontSize="large" /></button></span>
         </div>
       </div>
     </div>

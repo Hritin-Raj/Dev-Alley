@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
     user: null,
   });
 
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
 
   const isTokenValid = (token) => {
     try {
@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem("user");
       }
     }
-    setLoading(false); // Set loading to false once the state is initialized
+    setLoading(false);
   }, []);
 
   const signup = (token, user) => {
@@ -66,6 +66,7 @@ const AuthProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setAuth({ isLoggedIn: false, token: null, user: null });
+      console.log("Logged out auth", auth);
     }
   };
 
