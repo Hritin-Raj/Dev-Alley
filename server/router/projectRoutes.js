@@ -8,6 +8,7 @@ import {
   fetchMostLiked,
   uploadProjectImage,
   updateProject,
+  getRecentProjects
 } from "../controller/projectController.js";
 import { uploadMiddleware } from "../middlewares/upload.js";
 import { upload } from "../middlewares/multer.js";
@@ -21,6 +22,7 @@ router.put("/:id/update", updateProject);
 router.get("/home/:id/top-picks", fetchTopPicks);
 router.get("/home/:id/most-popular", fetchMostPopular);
 router.get("/most-liked", fetchMostLiked);
+router.get("/:id/most-recent", getRecentProjects);
 router.post("/:id/like", toggleLike);
 
 export default router;

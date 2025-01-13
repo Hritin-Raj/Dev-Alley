@@ -19,6 +19,10 @@ const Header = () => {
     }
   };
 
+  const handleExploreClick = (e) => {
+    navigate("/explore");
+  }
+
   const handleLogin = () => {
     navigate("/login");
   };
@@ -42,11 +46,9 @@ const Header = () => {
       <div className="h-full flex justify-between items-center">
         <SearchBar />
         <ul className="flex m-3  h-full items-center">
-          <li className="m-3 text-xl">
+          <li className="m-3 text-xl cursor-pointer" onClick={handleExploreClick}>
             Explore
-            <KeyboardArrowDownIcon className="mb-[2px]" />
           </li>
-          <li className="m-3 text-xl">About</li>
         </ul>
       </div>
       <div className="h-full flex items-center m-4">

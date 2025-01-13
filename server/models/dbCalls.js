@@ -24,8 +24,8 @@ export const getUserStats = async (id) => {
     // Fetch user with populated fields
     const user = await Users.findById(id)
       .select('-password') // Exclude password
-      .populate('followers', 'name _id')
-      .populate('following', 'name _id')
+      .populate('followers', 'name _id profileImage')
+      .populate('following', 'name _id profileImage')
       .lean(); // Convert to plain JavaScript object for better performance
 
     if (!user) {

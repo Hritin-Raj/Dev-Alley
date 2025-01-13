@@ -9,7 +9,6 @@ export const fetchData = async (endpoint) => {
     }
 
     const result = await response.json();
-    // console.log("result", result);
     return result;
   } catch (error) {
     console.error("API error:", error.message);

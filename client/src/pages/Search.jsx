@@ -65,11 +65,16 @@ const Search = () => {
                 <div
                   key={user._id}
                   onClick={() => handleResultClick(user)}
-                  className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer"
+                  className="flex bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer"
                 >
-                  <div className="flex items-center justify-between">
+                  <img
+                    src={user.profileImage}
+                    alt={name}
+                    className="w-20 h-20 rounded-full object-cover"
+                  />
+                  <div className="ml-4 flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-lg">{user.name}</h3>
+                      <h3 className="font-semibold text-2xl">{user.name}</h3>
                       <p className="text-gray-600">{user.email}</p>
                     </div>
                     <div className="text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -150,4 +155,3 @@ const Search = () => {
 };
 
 export default Search;
-

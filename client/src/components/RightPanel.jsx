@@ -51,8 +51,6 @@ const RightPanel = ({
                   userId={user._id}
                   profileImage={user.profileImage}
                   selfFollowing={checkSelfFollowing(user._id)}
-                  // userPopulated={userPopulated}
-                  // setUserPopulated={setUserPopulated}
                 />
               ))
             : following.map((user) => (
@@ -62,8 +60,6 @@ const RightPanel = ({
                   userId={user._id}
                   profileImage={user.profileImage}
                   selfFollowing={checkSelfFollowing(user._id)}
-                  // userPopulated={userPopulated}
-                  // setUserPopulated={setUserPopulated}
                 />
               ))}
         </div>
@@ -72,9 +68,9 @@ const RightPanel = ({
         id="right-panel-down"
         className="w-full overflow-hidden h-3/5 max-h-[800px] my-3 px-5 py-3 text-2xl rounded-3xl bg-white"
       >
-        <div>Suggestions</div>
+        <div></div>
         <div id="suggestion-list" className="overflow-hidden my-2">
-          list
+          
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@ const CreateProjectForm = () => {
     title: "",
     description: "",
     technologies: [],
-    images: "",
+    projectImage: "",
     githubLink: "",
     demoLink: "",
   });
@@ -80,23 +80,6 @@ const CreateProjectForm = () => {
     return true;
   };
 
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const validFiles = files.filter((file) => {
-      const isValid = file.type.startsWith("image/");
-      const isUnder5MB = file.size <= 5 * 1024 * 1024; // 5MB limit
-      return isValid && isUnder5MB;
-    });
-
-    if (validFiles.length !== files.length) {
-      setError("Some files were skipped. Images must be under 5MB.");
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...validFiles],
-    }));
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();

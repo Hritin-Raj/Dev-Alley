@@ -264,3 +264,55 @@ export const uploadProjectImage = async (req, res) => {
     res.status(500).json({ message: "Server error during image upload." });
   }
 };
+
+
+
+export const fetchTopUsers = async (req, res) => {
+  try {
+    const topUsers = await Users.aggregate([
+      {
+        $lookup: {
+          from: "projects", // Collection name for projects
+          localField: "_id", // User ID in the users collection
+          foreignField: "authorId", // Author ID in the projects collection
+          as: "userProjects", // Alias for the joined data
+        },
+      },
+      {
+        $addFields: {
+          projectCount: { $size: "$userProjects" }, // Count the number of projects
+        },
+      },
+      {
+        $sort: { projectCount: -1 }, // Sort by project count in descending order
+      },
+      {
+        $limit: 10, // Limit to the top 10 users
+      },
+      {
+        $project: {
+          name: 1,
+          email: 1,
+          projectCount: 1, // Include only the fields you need
+          "links.github": 1, // Include the GitHub link
+          "profileImage": 1,
+        },
+      },
+    ]);
+    console.log("top-users", topUsers);
+
+    res.status(200).json({
+      success: true,
+      message: "Top users fetched successfully.",
+      data: topUsers,
+    });
+  } catch (error) {
+    console.error("Error fetching top users:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch top users.",
+      error: error.message,
+    });
+  }
+};
+

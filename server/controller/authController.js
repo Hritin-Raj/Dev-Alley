@@ -22,7 +22,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, SECRET_KEY, {
-      expiresIn: "15m",
+      expiresIn: "30m",
     });
     res
       .status(200)
@@ -42,7 +42,6 @@ export const signup = async (req, res) => {
       return res.status(404).json({ message: "User already exists" });
     }
 
-    // Hash password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -54,7 +53,7 @@ export const signup = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, SECRET_KEY, {
-      expiresIn: "15m",
+      expiresIn: "30m",
     });
 
     res.status(200).json({ message: "Signup successful", token: token, user: newUser });

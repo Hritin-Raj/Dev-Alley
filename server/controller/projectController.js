@@ -48,7 +48,7 @@ export const createProject = async (req, res) => {
       authorId: user._id,
       description: formData.description,
       technologies: formData.technologies || [],
-      images: formData.images || [],
+      projectImage: formData.projectImage || [],
       githubLink: formData.githubLink,
       demoLink: formData.demoLink || "",
       likes: [],
@@ -223,48 +223,28 @@ export const updateProject = async (req, res) => {
 };
 
 
-// Route to update project details
-// export const udateProject = async (req, res) => {
-//   const { id } = req.params;
-//   const {
-//     title,
-//     description,
-//     technologies,
-//     githubLink,
-//     demoLink,
-//   } = req.body;
 
-//   try {
-//     const project = projects.find((proj) => proj.id === id);
+export const getRecentProjects = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 10; // Default to top 10 recent projects if no limit is specified
 
-//     if (!project) {
-//       return res.status(404).json({ message: "Project not found" });
-//     }
+    // Fetch projects sorted by createdAt in descending order
+    const recentProjects = await Projects.find({})
+      .sort({ createdAt: -1 }) // Sort by 'createdAt' in descending order
+      .limit(limit); // Limit the number of results
 
-//     // Update the project details
-//     project.title = title || project.title;
-//     project.description = description || project.description;
-//     project.technologies = technologies
-//       ? JSON.parse(technologies)
-//       : project.technologies;
-//     project.githubLink = githubLink || project.githubLink;
-//     project.demoLink = demoLink || project.demoLink;
+    res.status(200).json({
+      success: true,
+      message: "Recent projects fetched successfully",
+      projects: recentProjects,
+    });
+  } catch (error) {
+    console.error("Error fetching recent projects:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching recent projects",
+    });
+  }
+};
 
-//     // If a new image was uploaded, update the image path
-//     if (req.file) {
-//       // Delete the old image if it exists
-//       if (project.image && project.image !== "uploads/default.png") {
-//         const oldImagePath = path.join(__dirname, "../", project.image);
-//         fs.removeSync(oldImagePath);
-//       }
-
-//       project.image = `uploads/${req.file.filename}`;
-//     }
-
-//     res.status(200).json({ message: "Project updated successfully", project });
-//   } catch (error) {
-//     console.error("Error updating project:", error);
-//     res.status(500).json({ message: "Failed to update project", error });
-//   }
-// };
 

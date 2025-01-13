@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import CreateProject from "./pages/CreateProject.jsx";
 import EditProfile from "./components/EditProfileForm.jsx";
 import Search from "./pages/Search.jsx";
+import Explore from "./pages/Explore.jsx"
 
 function App() {
   return (
@@ -57,6 +58,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Search />
+              </ProtectedRoute>
+            }
+          />
+        <Route
+            path="/explore"
+            element={
+              <ProtectedRoute>
+                <Explore />
               </ProtectedRoute>
             }
           />

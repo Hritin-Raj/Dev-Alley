@@ -52,7 +52,7 @@ const Post = ({ project }) => {
         <div id="author" className="text-xl mt-2">
           {project.authorId.name}
         </div>
-        <div id="sub-heading" className="overflow-hidden h-[100px] text-xl mt-2">
+        <div id="sub-heading" className="overflow-auto h-[117px] text-xl mt-2">
           {project.description || "No description available"}
         </div>
       </div>
