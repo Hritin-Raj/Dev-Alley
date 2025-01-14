@@ -8,6 +8,7 @@ import authRoutes from "./router/authRoutes.js";
 import userRoutes from "./router/userRoutes.js";
 import projectRoutes from "./router/projectRoutes.js";
 import searchRoutes from "./router/searchRoutes.js";
+import contactRoutes from "./router/contactRoutes.js"
 
 const app = express();
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/contacts", contactRoutes);
 
 // Error handling middleware - must be after routes
 app.use((err, req, res, next) => {

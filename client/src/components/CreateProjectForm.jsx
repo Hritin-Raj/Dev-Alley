@@ -11,6 +11,7 @@ const CreateProjectForm = () => {
 
   const [technologyInput, setTechnologyInput] = useState("");
   const [formData, setFormData] = useState({
+    
     title: "",
     description: "",
     technologies: [],
