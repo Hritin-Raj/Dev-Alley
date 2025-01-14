@@ -118,10 +118,10 @@ function SignUp() {
 
         <div className="text-2xl my-[10px]">OR</div>
 
-        <button className="text-3xl my-[10px] bg-orange-300 rounded-xl w-[400px] h-[50px]">
+        {/* <button className="text-3xl my-[10px] bg-orange-300 rounded-xl w-[400px] h-[50px]">
           <GoogleIcon fontSize="large" className="mb-[5px]" /> Continue with
           Google
-        </button>
+        </button> */}
 
         <div className="text-xl my-[10px]">
           Already have an account?

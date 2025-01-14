@@ -2,6 +2,7 @@ import Users from "../models/users.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { sendEmail } from "../services/nodemailer.js";
 
 dotenv.config();
 
@@ -56,7 +57,17 @@ export const signup = async (req, res) => {
       expiresIn: "30m",
     });
 
-    res.status(200).json({ message: "Signup successful", token: token, user: newUser });
+    // Send a welcome email
+    const emailContent = {
+      name: name,
+      email: email,
+      message: `Welcome to our platform, ${name}!\n\nWe're excited to have you on board. If you have any questions, feel free to reach out to us.\n\nBest Regards.`,
+    };
+    await sendEmail(emailContent);
+
+    res
+      .status(200)
+      .json({ message: "Signup successful", token: token, user: newUser });
   } catch (error) {
     console.error("Error during signup:", error);
     res.status(500).json({ error: "An error occured while signing up " });

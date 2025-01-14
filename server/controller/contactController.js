@@ -9,7 +9,7 @@ export const storeContactDetails = async (req, res) => {
       // Save to database
       const contact = new Contacts({ name, email, message });
       console.log("contact", contact);
-      sendEmail(contact);
+      await sendEmail(contact);
       await contact.save();
   
       res.status(200).json({ success: true, message: "Message saved!" });
