@@ -74,7 +74,7 @@ export const toggleLike = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
 
-    const project = await Projects.findById(id);
+    const project = await Projects.findById(id).populate("authorId");
 
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
@@ -92,7 +92,7 @@ export const toggleLike = async (req, res) => {
 
     await project.save();
 
-    res.status(200).json({ message: "Successful", likesCount: project.likes.length });
+    res.status(200).json({ message: "Successful", likesCount: project.likes.length, project: project });
   } catch (error) {
     res.status(500).json({ message: "An error occurred", error });
   }

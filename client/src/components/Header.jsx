@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import SearchBar from "./SearchBar";
 import AddIcon from "@mui/icons-material/Add";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import HighlightIcon from "@mui/icons-material/Highlight";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
@@ -9,6 +8,10 @@ import { AuthContext } from "../contexts/AuthContext";
 const Header = () => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
+  };
 
   const handleCreate = () => {
     if (auth.isLoggedIn) {
@@ -19,9 +22,9 @@ const Header = () => {
     }
   };
 
-  const handleExploreClick = (e) => {
+  const handleExploreClick = () => {
     navigate("/explore");
-  }
+  };
 
   const handleLogin = () => {
     navigate("/login");
@@ -31,21 +34,23 @@ const Header = () => {
     navigate("/signup");
   };
 
-  const handleProfileClick = async (event) => {
+  const handleProfileClick = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("Profile Click", auth);
-    navigate(`/profile/${user._id}`, { state: { id: user._id }})
-  }
+    navigate(`/profile/${user._id}`, { state: { id: user._id } });
+  };
 
   return (
-    <div className="h-[90px] w-full p-[15px]  flex justify-between items-center">
-      <div className="h-full flex items-center  m-4">
-        <HighlightIcon fontSize="large" className=" text-yellow-400" />
+    <div className="h-[90px] w-full p-[15px] flex justify-between items-center">
+      <div
+        className="h-full flex items-center m-4 cursor-pointer"
+        onClick={handleLogoClick}
+      >
+        <HighlightIcon fontSize="large" className="text-yellow-400" />
         <span className="text-4xl">DevAlley</span>
       </div>
       <div className="h-full flex justify-between items-center">
         <SearchBar />
-        <ul className="flex m-3  h-full items-center">
+        <ul className="flex m-3 h-full items-center">
           <li className="m-3 text-xl cursor-pointer" onClick={handleExploreClick}>
             Explore
           </li>
@@ -60,8 +65,8 @@ const Header = () => {
         </div>
         <div className="m-3 text-xl p-3">
           {auth.isLoggedIn ? (
-            <button onClick={handleProfileClick} >
-            {`${auth.user?.name || "Profile"}`}
+            <button onClick={handleProfileClick}>
+              {`${auth.user?.name || "Profile"}`}
             </button>
           ) : (
             <>

@@ -1,3 +1,4 @@
+// post-project.jsx:
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -31,6 +32,7 @@ const Post = ({ project }) => {
       if (response) {
         setLiked(!liked);
         setLikesCount(response.likesCount);
+        // updateProjectsState([response.project]);
       }
     } catch (error) {
       console.error("Error toggling like:", error);

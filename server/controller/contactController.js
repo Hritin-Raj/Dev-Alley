@@ -1,15 +1,13 @@
 import Contacts from "../models/contacts.js";
-import { sendEmail } from "../services/nodemailer.js";
+import { receiveContactEmail } from "../services/nodemailer.js";
 
 export const storeContactDetails = async (req, res) => {
     try {
       const { name, email, message } = req.body;
-      console.log("req body", req.body);
   
       // Save to database
       const contact = new Contacts({ name, email, message });
-      console.log("contact", contact);
-      await sendEmail(contact);
+      await receiveContactEmail(contact);
       await contact.save();
   
       res.status(200).json({ success: true, message: "Message saved!" });

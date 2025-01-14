@@ -2,7 +2,7 @@ import Users from "../models/users.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
-import { sendEmail } from "../services/nodemailer.js";
+import { sendWelcomeEmail } from "../services/nodemailer.js";
 
 dotenv.config();
 
@@ -63,7 +63,7 @@ export const signup = async (req, res) => {
       email: email,
       message: `Welcome to our platform, ${name}!\n\nWe're excited to have you on board. If you have any questions, feel free to reach out to us.\n\nBest Regards.`,
     };
-    await sendEmail(emailContent);
+    await sendWelcomeEmail(emailContent);
 
     res
       .status(200)

@@ -205,7 +205,7 @@ const LeftPanel = ({ user, projects }) => {
                 : "../icons/DevelopmentIcon-1.jpg"
             }
             alt="Circular Icon"
-            className="w-40 h-40 rounded-full border-4 border-white"
+            className="w-40 h-40 rounded-full border-4 border-white object-cover"
           />
         </div>
       </div>
