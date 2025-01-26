@@ -9,6 +9,8 @@ const EditProjectForm = () => {
   const project = location.state?.project || null;
   console.log("project", project);
 
+  const url = "https://dev-alley-backend.onrender.com";
+
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
   const [technologyInput, setTechnologyInput] = useState("");
@@ -40,7 +42,7 @@ const EditProjectForm = () => {
       } else {
         try {
           setIsLoading(true);
-          const response = await fetch(`${process.env.BACKEND_URL}/projects/${projectId}`);
+          const response = await fetch(`${url}/projects/${projectId}`);
           const data = await response.json();
           setFormData({
             title: data.title,
@@ -236,7 +238,7 @@ const EditProjectForm = () => {
 
               try {
                 const response = await fetch(
-                  `${process.env.BACKEND_URL}/projects/upload`,
+                  `${url}/projects/upload`,
                   {
                     method: "POST",
                     body: formData,

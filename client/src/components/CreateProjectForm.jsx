@@ -9,6 +9,8 @@ const CreateProjectForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const url = "https://dev-alley-backend.onrender.com";
+
   const [technologyInput, setTechnologyInput] = useState("");
   const [formData, setFormData] = useState({
     
@@ -220,7 +222,7 @@ const CreateProjectForm = () => {
 
               try {
                 const response = await fetch(
-                  `${process.env.BACKEND_URL}/projects/upload`,
+                  `${url}/projects/upload`,
                   {
                     method: "POST",
                     body: formData,

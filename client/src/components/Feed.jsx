@@ -15,6 +15,7 @@ const Feed = () => {
   const [mostPopularPage, setMostPopularPage] = useState(1);
 
   const { auth, loading } = useContext(AuthContext);
+  const url = "https://dev-alley-backend.onrender.com";
 
   const updateProjectsState = (newProjects) => {
     setProjects((prevProjects) => {
@@ -33,7 +34,7 @@ const Feed = () => {
   const fetchTopPicks = async (page) => {
     try {
       const response = await fetch(
-        `${process.env.BACKEND_URL}/projects/home/${auth.user._id}/top-picks?page=${page}`
+        `${url}/projects/home/${auth.user._id}/top-picks?page=${page}`
       );
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -51,7 +52,7 @@ const Feed = () => {
   const fetchMostPopular = async (page) => {
     try {
       const response = await fetch(
-        `${process.env.BACKEND_URL}/projects/home/${auth.user._id}/most-popular?page=${page}`
+        `${url}/projects/home/${auth.user._id}/most-popular?page=${page}`
       );
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -69,7 +70,7 @@ const Feed = () => {
   const fetchMostLiked = async (page) => {
     try {
       const response = await fetch(
-        `${process.env.BACKEND_URL}/projects/most-liked?page=${page}`
+        `${url}/projects/most-liked?page=${page}`
       );
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);

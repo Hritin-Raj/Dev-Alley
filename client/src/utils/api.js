@@ -1,4 +1,4 @@
-const BASE_URL = process.env.BACKEND_URL || "http://localhost:3000/api";
+const BASE_URL = "https://dev-alley-backend.onrender.com";
 
 // FETCH
 export const fetchData = async (endpoint) => {

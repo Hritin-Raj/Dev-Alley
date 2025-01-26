@@ -8,6 +8,8 @@ const EditProfile = () => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const url = "https://dev-alley-backend.onrender.com";
+
   const user = auth.user;
   const [formData, setFormData] = useState({
     name: "",
@@ -232,7 +234,7 @@ const EditProfile = () => {
                 formData.append("image", file);
 
                 try {
-                  const response = await fetch(`${process.env.BACKEND_URL}/users/upload`, {
+                  const response = await fetch(`${url}/users/upload`, {
                     method: "POST",
                     body: formData,
                   });
