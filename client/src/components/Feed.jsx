@@ -3,8 +3,8 @@ import React, { useState, useEffect, useContext } from "react";
 import PostProject from "./Post-Project";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import { AuthContext } from "../contexts/AuthContext.jsx";
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 
 const Feed = () => {
   const [projects, setProjects] = useState({});
