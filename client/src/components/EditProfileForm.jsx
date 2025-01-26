@@ -232,7 +232,7 @@ const EditProfile = () => {
                 formData.append("image", file);
 
                 try {
-                  const response = await fetch("http://localhost:3000/api/users/upload", {
+                  const response = await fetch(`${process.env.BACKEND_URL}/users/upload`, {
                     method: "POST",
                     body: formData,
                   });

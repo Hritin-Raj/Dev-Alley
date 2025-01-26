@@ -40,7 +40,7 @@ const EditProjectForm = () => {
       } else {
         try {
           setIsLoading(true);
-          const response = await fetch(`http://localhost:3000/api/projects/${projectId}`);
+          const response = await fetch(`${process.env.BACKEND_URL}/projects/${projectId}`);
           const data = await response.json();
           setFormData({
             title: data.title,
@@ -236,7 +236,7 @@ const EditProjectForm = () => {
 
               try {
                 const response = await fetch(
-                  "http://localhost:3000/api/projects/upload",
+                  `${process.env.BACKEND_URL}/projects/upload`,
                   {
                     method: "POST",
                     body: formData,

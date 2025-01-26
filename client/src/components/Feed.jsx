@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from "react";
 import PostProject from "./Post-Project";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import dotenv from "dotenv";
+dotenv.config();
 
 const Feed = () => {
   const [projects, setProjects] = useState({});
@@ -31,7 +33,7 @@ const Feed = () => {
   const fetchTopPicks = async (page) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/projects/home/${auth.user._id}/top-picks?page=${page}`
+        `${process.env.BACKEND_URL}/projects/home/${auth.user._id}/top-picks?page=${page}`
       );
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -49,7 +51,7 @@ const Feed = () => {
   const fetchMostPopular = async (page) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/projects/home/${auth.user._id}/most-popular?page=${page}`
+        `${process.env.BACKEND_URL}/projects/home/${auth.user._id}/most-popular?page=${page}`
       );
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -64,15 +66,16 @@ const Feed = () => {
     }
   };
 
-  const fetchMostLiked = async () => {
+  const fetchMostLiked = async (page) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/projects/most-liked`
+        `${process.env.BACKEND_URL}/projects/most-liked?page=${page}`
       );
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
+      console.log("most-liked client res", data); // Log after parsing the response
       updateProjectsState(data);
       setMostLikedIds(deduplicateIds(data.map((p) => p._id)));
     } catch (error) {
@@ -86,8 +89,10 @@ const Feed = () => {
     if (auth?.isLoggedIn) {
       fetchTopPicks(1);
       fetchMostPopular(1);
+      console.log("isLogged true", auth);
     } else {
-      fetchMostLiked();
+      fetchMostLiked(1);
+      console.log("isLogged false", auth);
     }
   }, [auth, loading]);
 
@@ -113,7 +118,6 @@ const Feed = () => {
         }}
       />
     ));
-
 
   return (
     <div id="feed">

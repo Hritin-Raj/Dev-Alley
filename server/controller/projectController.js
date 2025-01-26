@@ -100,6 +100,7 @@ export const toggleLike = async (req, res) => {
 
 
 export const fetchTopPicks = async (req, res) => {
+  console.log("received");
   try {
     const { id } = req.params;
     const { page = 1, limit = 8 } = req.query;
@@ -128,6 +129,7 @@ export const fetchTopPicks = async (req, res) => {
 
 
 export const fetchMostPopular = async (req, res) => {
+  console.log("received");
   try {
     const { page = 1, limit = 8 } = req.query;
     const skip = (page - 1) * limit;
@@ -148,16 +150,19 @@ export const fetchMostPopular = async (req, res) => {
 };
 
 export const fetchMostLiked = async (req, res) => {
+  console.log("received");
   try {
-    console.log("here")
-    const { limit = 8 } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 8;
+    const skip = (page - 1) * limit;
 
     const mostLiked = await Projects.find({})
       .sort({ likes: -1 })
-      .limit(parseInt(limit))
+      .skip(skip)
+      .limit(limit)
       .populate("authorId", "name");
 
-    console.log("most-liked", mostLiked);
+    // console.log("most-liked", mostLiked);
 
     res.status(200).json(mostLiked);
   } catch (error) {
